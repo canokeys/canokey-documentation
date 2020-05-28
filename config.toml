@@ -1,0 +1,7 @@
+baseURL = "/"
+languageCode = "en-us"
+title = "CanoKey Documentation"
+theme = "learn"
+
+[markup.goldmark.renderer]
+unsafe = true
