@@ -29,9 +29,9 @@ CanoKey implements all the mandatory features of the [specification](https://gnu
 
 - PUT DATA with TAG `C4`
 - Algorithms
-  - RSA 2048
-  - ECDSA and ECDH: secp256r1 (NIST P256)
-  - ED25519 and Curve25519
+  - RSA 2048 (generate on card / import) / 4096 (import only)
+  - ECDSA and ECDH: secp256r1 (NIST P256) / secp384r1 (NIST P384) / secp256k1
+  - Ed25519 and X25519
 
 Note that the following features are not supported:
 

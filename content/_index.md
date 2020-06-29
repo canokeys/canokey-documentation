@@ -8,4 +8,4 @@ Use the most advanced WebAuthn and other technologies to protect your accounts. 
 
 ## Contribute to this documentation
 
-Feel free to update this content. Just clone [this repo](https://github.com/canokeys/canokey-site) and pull request it.
+Feel free to update this content. Just clone [this repo](https://github.com/canokeys/canokey-documentation) and pull request it.
