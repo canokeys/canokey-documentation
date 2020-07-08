@@ -181,7 +181,7 @@ Data is encoded in TLV-format.
 | Tag | Length                       | Value      |
 | --- | ---------------------------- | ---------- |
 | 71h | Length of name, max 64 bytes | Name       |
-| 74h | 8                            | Challenge  |
+| 74h | 8                            | Challenge (in big-endian) |
 
 ##### Response Data
 
@@ -219,7 +219,7 @@ Data is encoded in TLV-format.
 
 | Tag | Length                       | Value      |
 | --- | ---------------------------- | ---------- |
-| 74h | 8                            | Challenge  |
+| 74h | 8                            | Challenge (in big-endian) |
 
 ##### Response Data
 
