@@ -45,6 +45,7 @@ The AID of the admin applet is `A0000005272101`.
 | --------------- | ---- | ------------------------------------------------------------ |
 | Only increasing | 01h  | Enforces that a challenge is always higher than the previous |
 | Require touch   | 02h  | Require button press to generate OATH codes                  |
+| Exportable      | 04h  | Secret key can be exported by admin applet                   |
 
 ### 2. Select
 
@@ -180,7 +181,7 @@ Data is encoded in TLV-format.
 | Tag | Length                       | Value      |
 | --- | ---------------------------- | ---------- |
 | 71h | Length of name, max 64 bytes | Name       |
-| 74h | Length of challenge          | Challenge  |
+| 74h | 8                            | Challenge  |
 
 ##### Response Data
 
@@ -218,7 +219,7 @@ Data is encoded in TLV-format.
 
 | Tag | Length                       | Value      |
 | --- | ---------------------------- | ---------- |
-| 74h | Length of challenge          | Challenge  |
+| 74h | 8                            | Challenge  |
 
 ##### Response Data
 
