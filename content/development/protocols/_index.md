@@ -61,11 +61,11 @@ Please refer to the [OATH documentation](oath/).
 
 Please refer to the [Admin Applet documentation](admin/).
 
-### NDEF
+#### NDEF
 
-NFC Forum Type-4 Tag.
+[NFC Forum Type-4 Tag](http://apps4android.org/nfc-specifications/NFCForum-TS-Type-4-Tag_2.0.pdf).
 
-The maximum capacity of data is 1022-bytes.
+The maximum capacity of NDEF message is 1022-bytes.
 
 #### WebUSB
 
