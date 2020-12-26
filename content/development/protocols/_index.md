@@ -10,6 +10,7 @@ CanoKey supports the following protocols:
 - OpenPGP Smart Card 3.4
 - PIV (NIST SP 800-73-4)
 - OATH
+- NDEF
 - WebUSB
 
 Besides, CanoKey also provides an additional admin applet to manage the key.
@@ -59,6 +60,12 @@ Please refer to the [OATH documentation](oath/).
 #### Admin Applet
 
 Please refer to the [Admin Applet documentation](admin/).
+
+### NDEF
+
+NFC Forum Type-4 Tag.
+
+The maximum capacity of data is 1022-bytes.
 
 #### WebUSB
 
