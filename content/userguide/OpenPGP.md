@@ -11,12 +11,12 @@ The private key can be stored in CanoKey, or you can use CanoKey to generate a O
 ## Supported algorithm
 
 * RSA2048
-* RSA4096[^1]
+* RSA4096\*
 * Curve 25519
 * NIST P-256
 * secp256k1
 
-[^1] Due to computing performance with STM32, RSA4096 cannot be generated in the card. However you can generate the key pair and import it to CanoKey.
+\* Due to computing performance with STM32, RSA4096 cannot be generated in the card. However you can generate the key pair and import it to CanoKey.
 
 ## Using GnuPG
 
