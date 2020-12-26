@@ -8,6 +8,8 @@ This section describes what you need to do before you get started using your Can
 
 ## Linux
 
+### udev
+
 In order to allow non-root user use the key, you need to add a udev rule into /etc/udev/rules.d/69-canokeys.rules
 
 ```
@@ -32,3 +34,44 @@ After add this file, run the follow commands to apply changes.
 ```
 udevadm control --reload-rules && udevadm trigger
 ```
+
+### ccid
+
+You can install the newest version of `ccid` as CanoKey has already been included in the [upstream](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38).
+
+You may check your `/etc/libccid_Info.plist` wheter `canokey` is inside.
+
+If not, or you do not bother install the newest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
+
+For each row, append one vid, pid and product name in each column, like the following `diff`
+
+```diff
+diff --git a/libccid_Info.plist b/libccid_Info.plist
+index 05c0208..33a1779 100644
+--- a/libccid_Info.plist
++++ b/libccid_Info.plist
+@@ -576,6 +576,7 @@
+                <string>0x08C3</string>
+                <string>0x15E1</string>
+                <string>0x062D</string>
++               <string>0x20A0</string>
+        </array>
+ 
+        <key>ifdProductID</key>
+@@ -1054,6 +1055,7 @@
+                <string>0x0402</string>
+                <string>0x2007</string>
+                <string>0x0001</string>
++               <string>0x42D4</string>
+        </array>
+ 
+        <key>ifdFriendlyName</key>
+@@ -1532,6 +1534,7 @@
+                <string>Precise Biometrics Precise 200 MC</string>
+                <string>RSA RSA SecurID (R) Authenticator</string>
+                <string>THRC Smart Card Reader</string>
++               <string>Canokey</string>
+        </array>
+ 
+        <key>Copyright</key>
+``` 
