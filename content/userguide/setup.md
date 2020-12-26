@@ -10,7 +10,7 @@ This section describes what you need to do before you get started using your Can
 
 ### udev
 
-In order to allow non-root user use the key, you need to add a udev rule into /etc/udev/rules.d/69-canokeys.rules
+In order to allow non-root user use the key, you need to add a udev rule into `/etc/udev/rules.d/69-canokeys.rules`
 
 ```
 SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
@@ -41,11 +41,11 @@ You can install the newest version of `ccid` as CanoKey has already been include
 
 You may check your `/etc/libccid_Info.plist` wheter `canokey` is inside.
 
-If not, or you do not bother install the newest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
+If not, or you do not want to/could not install the newest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
 
-For each row, append one vid, pid and product name in each column, like the following `diff`
+For array `ifdVendorID`, `ifdProductID`, and `ifdFriendlyName`, append some value respectively, like the following `diff`
 
-```diff
+```
 diff --git a/libccid_Info.plist b/libccid_Info.plist
 index 05c0208..33a1779 100644
 --- a/libccid_Info.plist
