@@ -8,7 +8,7 @@ This section describes what you need to do before you get started using your Can
 
 ## Linux
 
-In order to allow non-root user use the key, you need to add a udev rule into /usr/lib/udev/rules.d/69-canokeys.rules
+In order to allow non-root user use the key, you need to add a udev rule into /etc/udev/rules.d/69-canokeys.rules
 
 ```
 SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
