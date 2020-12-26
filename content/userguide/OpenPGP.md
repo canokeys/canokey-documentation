@@ -12,11 +12,17 @@ The private key can be stored in CanoKey, or you can use CanoKey to generate a O
 
 * RSA2048
 * RSA4096\*
-* Curve 25519
-* NIST P-256
+* X25519
+* Ed25519
+* NIST P-256 (secp256r1)
+* NIST P-384 (secp384r1)
 * secp256k1
 
 \* Due to computing performance with STM32, RSA4096 cannot be generated in the card. However you can generate the key pair and import it to CanoKey.
+
+Note that RSA3072 is not supported currently.
+
+It is worth mentioning that one may refer to [this blog on multiple ecc curves](https://jia.je/crypto/2020/05/21/ecc-curves/) on aliases of one curve.
 
 ## Using GnuPG
 
