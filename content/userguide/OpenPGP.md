@@ -46,6 +46,8 @@ Note that even if there are three policies, touch result is cached in one variab
 
 One may disable Signature PIN (forcesig) after one enables touch policy for convenience with little loss of security.
 
+Touch policy is only applicable when using USB interface.
+
 ## Using GnuPG
 
 Please refer to the [GNU Privacy Handbook](https://gnupg.org/gph/en/manual.html) at the moment.
