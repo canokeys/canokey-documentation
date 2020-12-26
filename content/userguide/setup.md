@@ -15,6 +15,7 @@ SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
 ACTION!="add|change", GOTO="canokeys_rules_end"
 ATTRS{idVendor}=="0483", ATTRS{idProduct}=="0007", ENV{ID_SMARTCARD_READER}="1"
 ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="0e80", ENV{ID_SMARTCARD_READER}="1"
+ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", ENV{ID_SMARTCARD_READER}="1"
 LABEL="canokeys_rules_end"
 ```
 After add this file, run the follow commands to apply changes.
