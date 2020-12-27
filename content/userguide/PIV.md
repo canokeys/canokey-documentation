@@ -14,8 +14,6 @@ Personal Identity Verification (PIV) is a US government standard defined as [FIP
 
 ## Default values
 
-One can learn from the [source code](https://github.com/canokeys/canokey-core/blob/master/applets/piv/piv.c) that
-
 * PIN: default 123456
 * PUK: default 12345678
 * Management Key: default 010203040506070801020304050607080102030405060708

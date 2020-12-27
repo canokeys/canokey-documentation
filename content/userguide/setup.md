@@ -15,8 +15,6 @@ In order to allow non-root user use the key, you need to add a udev rule into `/
 ```
 SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
 ACTION!="add|change", GOTO="canokeys_rules_end"
-ATTRS{idVendor}=="0483", ATTRS{idProduct}=="0007", ENV{ID_SMARTCARD_READER}="1"
-ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="0e80", ENV{ID_SMARTCARD_READER}="1"
 ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", ENV{ID_SMARTCARD_READER}="1"
 LABEL="canokeys_rules_end"
 
@@ -37,11 +35,11 @@ udevadm control --reload-rules && udevadm trigger
 
 ### ccid
 
-You can install the newest version of `ccid` as CanoKey has already been included in the [upstream](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38).
+You can install the latest version of `ccid` as CanoKey has already been included in the [upstream](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38).
 
 You may check your `/etc/libccid_Info.plist` wheter `canokey` is inside.
 
-If not, or you do not want to/could not install the newest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
+If not, or you do not want to/could not install the latest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
 
 For array `ifdVendorID`, `ifdProductID`, and `ifdFriendlyName`, append some value respectively, like the following `diff`
 
@@ -70,7 +68,7 @@ index 05c0208..33a1779 100644
                 <string>Precise Biometrics Precise 200 MC</string>
                 <string>RSA RSA SecurID (R) Authenticator</string>
                 <string>THRC Smart Card Reader</string>
-+               <string>Canokey</string>
++               <string>CanoKey</string>
         </array>
  
         <key>Copyright</key>

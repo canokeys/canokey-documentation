@@ -248,8 +248,8 @@ Set if OpenPGP operations require a touch.
 | ----- | ----- |
 | CLA   | 00h   |
 | INS   | 09h   |
-| P1    | 00h for SIG, 01h for DEC, 02h for AUT |
-| P2    | 00h for no touch; other value for cached time (in seconds)  |
+| P1    | 00h for SIG, 01h for DEC, 02h for AUT, 03h for cache time |
+| P2    | When P1 is 00/01/02, 00h for no touch, 01h for touch. When P1 is 03h, cache time (in seconds) |
 
 #### Response
 
@@ -386,7 +386,7 @@ Get current configurations.
 
 #### Response
 
-Six bytes in total.
+7 bytes in total.
 
 | Byte | Meaning        |
 | ---- | -------        |
@@ -396,6 +396,7 @@ Six bytes in total.
 | 4    | OpenPGP SIG touch policy |
 | 5    | OpenPGP DEC touch policy |
 | 6    | OpenPGP AUT touch policy |
+| 7    | OpenPGP touch cache time |
 
 | SW   | Description |
 | ---- | ----------- |

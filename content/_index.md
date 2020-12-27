@@ -4,8 +4,8 @@ Use the most advanced WebAuthn and other technologies to protect your accounts. 
 
 ## Contents
 
-- [Development](development/)
 - [User Guide](userguide/)
+- [Development](development/)
 
 ## Contribute to this documentation
 

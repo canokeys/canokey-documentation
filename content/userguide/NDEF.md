@@ -6,16 +6,13 @@ weight = 5
 
 ## Default values
 
-One can learn from the [source code](https://github.com/canokeys/canokey-core/blob/master/applets/ndef/ndef.c) that
-
-* Mode: default Read/Write, can be toggled in [Webconsole](https://console.canokeys.org/) Admin Applet
-* Content: default NDEF message url "canokeys.org"
-* Max NDEF Message Length: 1022Byte
+* Mode: default Read/Write, can be toggled in [Web Console](https://console.canokeys.org/) by using Admin Applet
+* Content: default NDEF message with the url "canokeys.org"
+* Max NDEF Message Length: 1022 Bytes
 
 ## Usage
 
-Often used in NFC, one may have many NDEF records into it. One may use it for name card exchanging or public key exchanging. Note that secrets should not be stored in NDEF as there is no encryption.
+You may use it as an NFC tag that contains a URL, a vCard, or anything that NDEF supports.
+**Note that secrets should not be stored in NDEF as there is no encryption.**
 
-One may use `NFC Tools` to manipulate the NDEF message.
-
-It is expected to be able to use some NDEF utils in webconsole, however there is no development.
+You may use [NFC Tools](https://play.google.com/store/apps/details?id=com.wakdev.wdnfc) to manipulate the NDEF message.

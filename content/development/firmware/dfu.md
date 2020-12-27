@@ -6,7 +6,7 @@ weight: 20
 
 The STM32L432 bootloader supports [USB DFU protocol](https://www.st.com/resource/en/application_note/cd00264379-usb-dfu-protocol-used-in-the-stm32-bootloader-stmicroelectronics.pdf).
 
-You can use [dfu-utils](https://github.com/z4yx/dfu-util) or [Web DFU](https://dfu.canokeys.org/) to flash firmware onto your CanoKey or Nucleo-L432KC board.
+You can use [dfu-utils](https://github.com/z4yx/dfu-util) or [Web DFU](https://dfu.canokeys.org/) to flash firmware onto your self-made CanoKey or Nucleo-L432KC board.
 
 ## Entering DFU mode
 
