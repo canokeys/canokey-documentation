@@ -15,6 +15,10 @@ Supported features:
 
 Currently only ECDSA ([COSE ES256](https://www.iana.org/assignments/cose/cose.xhtml#algorithms)) is supported.
 
+## Multi-Factor Authentication
+
+Use it after SETUP(refer to another user guide).
+
 ## OpenSSH
 
 You may use the following command to generate a private key for ssh. Note that the "private key" stored in disk is not the real private key, see [here](https://undeadly.org/cgi?action=article;sid=20191115064850) for more info.
@@ -24,6 +28,10 @@ ssh-keygen -t ecdsa-sk
 ```
 
 Note that `ed25519-sk` is not supported currently.
+
+## PAM
+
+Use `pam_u2f` provided by Yubico. One common scenerio is `sudo`.
 
 ## Management
 

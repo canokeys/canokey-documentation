@@ -13,10 +13,15 @@ This section describes what you need to do before you get started using your Can
 In order to allow non-root user use the key, you need to add a udev rule into `/etc/udev/rules.d/69-canokeys.rules`
 
 ```
+# GnuPG/pcsclite
 SUBSYSTEM!="usb", GOTO="canokeys_rules_end"
 ACTION!="add|change", GOTO="canokeys_rules_end"
 ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", ENV{ID_SMARTCARD_READER}="1"
 LABEL="canokeys_rules_end"
+
+# FIDO2/U2F
+# note that if you find this line in 70-u2f.rules, you can ignore it
+KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="42d4", TAG+="uaccess", GROUP="plugdev", MODE="0660"
 
 # make this usb device accessible for users, used in WebUSB
 # change the mode so unprivileged users can access it, insecure rule, though
@@ -27,6 +32,9 @@ SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", MODE:="0666"
 #SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", GROUP="plugdev", MODE="0660"
 #SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", TAG+="uaccess"
 ```
+
+`TAG+="uaccess"` is more systemd related while `GROUP="plugdev", MODE="0660"` is more traditional. You can choose either solution of them.
+
 After add this file, run the follow commands to apply changes.
 
 ```
@@ -73,3 +81,7 @@ index 05c0208..33a1779 100644
  
         <key>Copyright</key>
 ``` 
+
+### libfido2
+
+`libfido2` is for FIDO2/U2F related programs. Other dependencies may be checked by guides from yubikey.
