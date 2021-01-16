@@ -28,13 +28,22 @@ Note that RSA3072 is not supported currently.
 * Admin PIN: default 12345678, min len 8, max len 64
 * Reset Code: default not set, min len 8, max len 64
 * Signature PIN : forced // namely verify pin every signature
-* Touch Policy: NO for SIG, DEC, AUT
+* Touch Policy: OFF for SIG, DEC, AUT
+* Touch Cache Time: 0
 
 ## Touch Policy
 
-There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT).
+There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in admin applet in web console. The value of Touch Cache Time is in range 0-255, and with value 0, "Always touch" is implemented.
 
 **Touch policy is only applicable when using USB interface.**
+
+## PIN Policy
+
+PIN is never cached by `gpg-agent`, nor `scdaemon`, it is "cached" by smart card itself by maintaining status of the PIN.
+
+For DEC and AUT, after successfully verifying the PIN, it is always valid for the whole power-up. DEC and AUT share the same status, so it may happen that after DEC, AUT does not request PIN.
+
+For SIG, if `forcesig` is on, then PIN is requested for each signature, otherwise PIN is requested for the first signature after power-up. This status is independent of that of DEC and AUT.
 
 ## Using GnuPG
 
