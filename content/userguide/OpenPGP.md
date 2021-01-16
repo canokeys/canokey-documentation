@@ -49,6 +49,47 @@ Please refer to the [GNU Privacy Handbook](https://gnupg.org/gph/en/manual.html)
 
 You may also refer to [https://github.com/drduh/YubiKey-Guide](https://github.com/drduh/YubiKey-Guide).
 
+### Cheatsheet
+
+```
+# card related
+# try below to make sure gpg works with canokey
+gpg --card-status
+# use this for editting card info and config
+# and/or generating keys
+gpg --edit-card
+# generate key
+gpg --expert --full-generate-key
+# get key infos
+gpg --list-keys --with-fingerprint --with-subkey-fingerprint [keyid or user id]
+gpg --list-keys --with-keygrip [keyid or user id]
+gpg --list-sigs [keyid or user id]
+# edit key
+# add uid/subkey in the interactive shell
+# keytocard or addcardkey
+gpg --edit-key <keyid or user id>
+# import/export key
+gpg --import file
+gpg --armor --output file --export <keyid or user id>
+gpg --armor --output file --export-secret-keys <keyid or user id>
+gpg --delete-keys <keyid or user id>
+# sign and verify
+gpg --armor --sign file
+gpg --sign-key --ask-cert-level <key id>
+gpg --armor --detach-sign file
+gpg --clear-sign file
+gpg --verify file.asc
+# encrypt and decrypt
+gpg --armor --encrypt --recipient <keyid or user id>
+gpg --decrypt file
+# misc
+gpgconf --kill gpg-agent
+gpg-connect-agent reloadagent /bye
+gpgconf --list-dirs agent-socket
+gpgconf --list-dirs agent-extra-socket
+gpgconf --list-dirs agent-ssh-socket
+```
+
 ### Linux
 
 Note that we recommend using `ccid` and `pcsclite` for `gpg-agent`/`scdaemon` to access CanoKey, namely in `~/.gnupg/scdaemon.conf`
