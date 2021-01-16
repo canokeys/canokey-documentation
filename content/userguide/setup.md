@@ -10,7 +10,7 @@ This section describes what you need to do before you get started using your Can
 
 ### udev
 
-In order to allow non-root user use the key, you need to add a udev rule into `/etc/udev/rules.d/69-canokeys.rules`
+In order to allow non-root user use the key, you need to add a `udev` rule into `/etc/udev/rules.d/69-canokeys.rules`
 
 ```
 # GnuPG/pcsclite
@@ -45,7 +45,7 @@ udevadm control --reload-rules && udevadm trigger
 
 You can install the latest version of `ccid` as CanoKey has already been included in the [upstream](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38).
 
-You may check your `/etc/libccid_Info.plist` wheter `canokey` is inside.
+You may check your `/etc/libccid_Info.plist` whether `canokey` is inside.
 
 If not, or you do not want to/could not install the latest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
 
@@ -84,4 +84,4 @@ index 05c0208..33a1779 100644
 
 ### libfido2
 
-`libfido2` is for FIDO2/U2F related programs. Other dependencies may be checked by guides from yubikey.
+`libfido2` is for FIDO2/U2F related programs. Other dependencies may be checked by guides from Yubico.

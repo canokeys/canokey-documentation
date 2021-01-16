@@ -1,10 +1,10 @@
 +++
 title = "OpenPGP"
 date =  2020-07-04T16:19:06+08:00
-weight = 5
+weight = 20
 +++
 
-[OpenPGP](https://www.openpgp.org/) is a standard for signing and encrypting defined as [RFC4880](https://tools.ietf.org/html/rfc4880). It uses a private key to sign / encrypt messages and documents. One of the most commonly used tool for using OpenPGP is GNU Privacy Guard, which is short as GnuPG or GPG. So you might see some online materials also use GPG to denote the OpenPGP related techology.
+[OpenPGP](https://www.openpgp.org/) is a standard for signing and encrypting defined as [RFC4880](https://tools.ietf.org/html/rfc4880). It uses a private key to sign / encrypt messages and documents. One of the most commonly used tools for using OpenPGP is GNU Privacy Guard, which is short as GnuPG or GPG.
 
 The private key can be stored in CanoKey, or you can use CanoKey to generate a OpenPGP key. The private key stored in CanoKey cannot be read out. This reduced the chance of leakage of the private key.
 
@@ -33,17 +33,15 @@ Note that RSA3072 is not supported currently.
 
 ## Touch Policy
 
-There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in admin applet in web console. The value of Touch Cache Time is in range 0-255, and with value 0, "Always touch" is implemented.
+There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in the admin applet in the web console. The value of touch cache time is in between 0 and 255 seconds (0 means no cache).
 
-**Touch policy is only applicable when using USB interface.**
+**Touch policy is only applicable when using the USB interface.**
 
 ## PIN Policy
 
-PIN is never cached by `gpg-agent`, nor `scdaemon`, it is "cached" by smart card itself by maintaining status of the PIN.
+For DEC and AUT, after successfully verifying the PIN, it is always valid for the whole power-up.
 
-For DEC and AUT, after successfully verifying the PIN, it is always valid for the whole power-up. DEC and AUT share the same status, so it may happen that after DEC, AUT does not request PIN.
-
-For SIG, if `forcesig` is on, then PIN is requested for each signature, otherwise PIN is requested for the first signature after power-up. This status is independent of that of DEC and AUT.
+For SIG, if the flag `forcesig` is on, the PIN is requested for each signature; otherwise, PIN is only requested for the first signature after power-up.
 
 ## Using GnuPG
 
@@ -53,7 +51,7 @@ You may also refer to [https://github.com/drduh/YubiKey-Guide](https://github.co
 
 ### Linux
 
-Note that we recommend using ccid and pcsclite for gpg-agent/scdaemon to access CanoKey, namely in `~/.gnupg/scdaemon.conf`
+Note that we recommend using `ccid` and `pcsclite` for `gpg-agent`/`scdaemon` to access CanoKey, namely in `~/.gnupg/scdaemon.conf`
 
 ```
 pcsc-driver /usr/lib/libpcsclite.so
@@ -61,7 +59,7 @@ card-timeout 5
 disable-ccid
 ```
 
-You should setup ccid as in [setup](https://docs.canokeys.org/userguide/setup/).
+You should setup `ccid` as in [setup](https://docs.canokeys.org/userguide/setup/).
 
 ## Debug and Report
 
