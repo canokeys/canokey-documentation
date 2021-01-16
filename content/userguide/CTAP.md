@@ -10,18 +10,26 @@ The implementations are following [CTAP2](https://fidoalliance.org/specs/fido-v2
 
 Supported features:
 
-- Up to 64 resident keys
+- Up to 64 resident keys\*
 - The HMAC extension
 
 Currently only ECDSA ([COSE ES256](https://www.iana.org/assignments/cose/cose.xhtml#algorithms)) is supported.
+
+\* You may refer to [this blog by Yubico](https://www.yubico.com/blog/yubicos-u2f-key-wrapping/) and [this blog by scateu](http://scateu.me/2016/11/30/u2f-zero.html) on unlimited number of FIDO service support.
 
 ## Multi-Factor Authentication
 
 Use it after SETUP(refer to another user guide).
 
+## PIN
+
+PIN is not set by default. You may set the PIN using Windows Hello or other possible applications.
+
+Note that PIN is *globally* applicable to all FIDO related operations.
+
 ## OpenSSH
 
-You may use the following command to generate a private key for ssh. Note that the "private key" stored in disk is not the real private key, see [here](https://undeadly.org/cgi?action=article;sid=20191115064850) for more info.
+You may use the following command to generate a private key for ssh. See [here](https://undeadly.org/cgi?action=article;sid=20191115064850) for more info.
 
 ```
 ssh-keygen -t ecdsa-sk
@@ -37,9 +45,12 @@ Use `pam_u2f` provided by Yubico. One common scenerio is `sudo`.
 
 Currently fine-grained management of the resident keys are not available.
 
-You can reset the whole applet (clear all the resident keys) in Admin applet.
+You can reset the whole applet (clear all the resident keys, the pin and regenerate some private keys) in Admin applet.
 
 ## HMAC-secret extension
 
-One possible application of this extension is this tool [khefin](https://github.com/mjec/khefin).
+Possible applications:
+
+- [khefin](https://github.com/mjec/khefin), for LUKS full disk encryption.
+- [Windows Hello](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/microsoft-compatible-security-key)
 
