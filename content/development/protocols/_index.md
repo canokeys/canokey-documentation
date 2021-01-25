@@ -23,6 +23,7 @@ Supported features:
 
 - Up to 64 resident keys
 - The HMAC extension
+- Ed25519
 
 #### OpenPGP Smart Card 3.4
 

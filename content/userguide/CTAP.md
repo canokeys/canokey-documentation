@@ -12,6 +12,7 @@ Supported features:
 
 - Up to 64 resident keys
 - The HMAC extension
+- Ed25519
 
 ## Multi-Factor Authentication
 
@@ -27,6 +28,8 @@ You may use the following command to generate a private key for ssh. See [here](
 
 ```
 ssh-keygen -t ecdsa-sk
+# or you prefer ed25519
+ssh-keygen -t ed25519-sk
 ```
 
 ## PAM
