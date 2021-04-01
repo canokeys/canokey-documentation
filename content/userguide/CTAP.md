@@ -41,4 +41,5 @@ Use `pam_u2f` provided by Yubico. One common scenario is `sudo`.
 Possible applications:
 
 - [khefin](https://github.com/mjec/khefin), for LUKS full disk encryption.
+- [systemd v248+](http://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html), for LUKS full disk encryption
 - [Windows Hello](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/microsoft-compatible-security-key)
