@@ -42,4 +42,11 @@ Possible applications:
 
 - [khefin](https://github.com/mjec/khefin), for LUKS full disk encryption.
 - [systemd v248+](http://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html), for LUKS full disk encryption
+
+  {{% notice note %}}
+  Due to [a bug](https://github.com/Yubico/libfido2/issues/322#issuecomment-817174671) in the CTAP implementation, Canokeys with firmware version <= 1.3 are incompatible with libfido2 1.7.0, and thus cannot be used with `systemd-cryptenroll`.
+
+  Users with such key may try libfido2 1.6.0 instead.
+  {{% /notice %}}
+
 - [Windows Hello](https://docs.microsoft.com/en-us/windows/security/identity-protection/hello-for-business/microsoft-compatible-security-key)
