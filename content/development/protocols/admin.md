@@ -405,7 +405,8 @@ Get current configurations.
 ### 17. Factory Reset
 
 Reset the applets (FIDO key/cert and SN will not be reset).
-Once the command is executed, you must touch within 2 seconds when blinking until it responds with `9000`.
+PIN retries must be used up for reset to begin.
+Once the command is executed, you must **touch within 2 seconds when blinking** until it responds with `9000`.
 
 #### Request
 
@@ -423,6 +424,8 @@ Once the command is executed, you must touch within 2 seconds when blinking unti
 | SW   | Description |
 | ---- | ----------- |
 | 9000 | Success     |
+| 6982 | Not touched when blinking |
+| 6985 | PIN not locked yet |
 
 ### 18. Vendor specific
 
