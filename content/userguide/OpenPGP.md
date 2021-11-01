@@ -33,7 +33,15 @@ Note that RSA3072 is not supported currently.
 
 ## Touch Policy
 
-There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in the admin applet in the web console. The value of touch cache time is in between 0 and 255 seconds (0 means no cache).
+There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in the admin applet in the web console or via the `gpg` command. The value of touch cache time is in between 0 and 255 seconds (0 means no cache).
+
+### Firmware Version <= 1.4
+
+Touch policy is configured through the admin applet. The technical details can be found in [https://docs.canokeys.org/development/protocols/admin/](https://docs.canokeys.org/development/protocols/admin/).
+
+### Firmware Version >= 1.5
+
+Touch policy is implemented using the User Interaction Flag (Part 4.4.3.6 of the OpenPGP specification). Use a recent GnuPG to configure it.
 
 **Touch policy is only applicable when using the USB interface.**
 
