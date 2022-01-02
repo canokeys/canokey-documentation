@@ -35,7 +35,7 @@ SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", MODE:="0666"
 
 `TAG+="uaccess"` is more systemd related while `GROUP="plugdev", MODE="0660"` is more traditional. You can choose either solution of them.
 
-After add this file, run the follow commands to apply changes.
+After adding this file, run the follow commands to apply changes.
 
 ```
 udevadm control --reload-rules && udevadm trigger
