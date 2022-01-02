@@ -1,7 +1,24 @@
 baseURL = "/"
-languageCode = "en-us"
-title = "CanoKey Documentation"
-theme = "learn"
+languageCode = "en-US"
+defaultContentLanguage = "en"
+
+title = "CanoKeys Documentation"
+theme = "hugo-theme-learn"
 
 [markup.goldmark.renderer]
-unsafe = true
+  unsafe = true
+
+[Languages]
+[Languages.en]
+title = "CanoKeys"
+weight = 1
+languageName = "English"
+landingPageURL = "/en"
+landingPageName = "<i class='fas fa-home'></i> Home"
+
+[Languages.zh-hans]
+title = "CanoKeys"
+weight = 2
+languageName = "简体中文"
+landingPageURL = "/zh-Hans"
+landingPageName = "<i class='fas fa-home'></i> 首页"
