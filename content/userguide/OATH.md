@@ -15,7 +15,7 @@ You should use `ykman` command to configure OATH and read OATH token.
 
 If your authentication provider provides you with a URI `otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM`, you should configure it by
 ```
-$ ykman -r "Canokeys" oath accounts uri "otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM"
+ykman -r "Canokeys" oath accounts uri "otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM"
 ```
 
 Or if you are offered the fields separately, including the base32 encoded secret (in this example, it's `SOMESECRET`), the algorithm (in this example, it's SHA1), the length of digits, you can setup by
@@ -24,9 +24,12 @@ Or if you are offered the fields separately, including the base32 encoded secret
 ykman -r "Canokeys" oath accounts add -o TOTP -d 6 -a SHA1 -i 'username@EXAMPLE.COM' -P 30 USERNAME SOMESECRET
 ```
 
+You can use `ykman oath accounts add --help` to find all the available options.
+
 ### Read OATH token
 
 You can use [Yubico Authenticator](https://www.yubico.com/products/yubico-authenticator/) to read the OTP.
+
 * Open Yubico Authenticator, click the button on the top left corner to fire up the side menu.
 * Click 'Settings' and then click 'Custom reader'
 * Select 'Enable custom reader' and fill in 'Canokey' in the 'Custom reader filter'
@@ -37,7 +40,7 @@ You can use [Yubico Authenticator](https://www.yubico.com/products/yubico-authen
 
 Then you'll see all your OATH tokens listed. 
 
-## Firmware version older than 1.5 (for example, CanoKey epoxy editions)
+## Firmware version older than 1.5 (for example, CanoKey epoxy edition)
 
 You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium-based web browser to configure OATH.
 
@@ -47,7 +50,7 @@ You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium
 * Click 'CONNECT' on the top right corner
 * Select your CanoKey from the prompt dialog
 * Click the '+' sign on the down left of the box, then the 'Add credential to OATH Applet' section will show up on the web page.
-* Fill in the details, **or** copy and click 'IMPORT OTPAUTH FROM CLIPBOARD'.
+* Fill in the details, **or** copy the URI you got and click 'IMPORT OTPAUTH FROM CLIPBOARD'.
 * Click ADD
 * If there is no error, there will be a green box with 'Add OATH credential success' shown in the bottom left of your web page.
 
@@ -63,6 +66,7 @@ You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium
 ## Optionally: Enable touch to input for HOTP
 
 If you are using HOTP and you want to make your CanoKey input your HOTP token every time you touch the key, you should 
+
 * Go to [Admin Applet](https://console.canokeys.org/admin) of the web console and connect your CanoKey.
 * If you haven't connected your CanoKey to the web console, click 'CONNECT' on the top right corner and select your CanoKey from the prompt dialog.
 * Click AUTHENTICATE and input your admin applet password to authenticate as admin user
