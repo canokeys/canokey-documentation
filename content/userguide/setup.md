@@ -43,11 +43,10 @@ udevadm control --reload-rules && udevadm trigger
 
 ### ccid
 
-You can install the latest version of `ccid` as CanoKey has already been included in the [upstream](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38).
+CanoKey has already been [included in ccid](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38) since 1.4.34. Make sure you are using `ccid` version 1.4.34 or newer.
 
-You may check your `/etc/libccid_Info.plist` whether `canokey` is inside.
-
-If not, or you do not want to/could not install the latest version of `ccid`, you should make the following changes to `/etc/libccid_Info.plist`.
+If you do not want to/could not install version 1.4.34 or newer of `ccid`, you should check your `/etc/libccid_Info.plist` whether `canokey` is inside.
+If not,  make the following changes to `/etc/libccid_Info.plist`.
 
 For array `ifdVendorID`, `ifdProductID`, and `ifdFriendlyName`, append some value respectively, like the following `diff`
 
