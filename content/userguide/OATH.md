@@ -6,11 +6,11 @@ weight = 35
 
 OATH is [an organization](https://openauthentication.org/) who provides open authentication standards: Time-based One Time Password (TOTP) and HMAC-based One Time Password (HOTP).
 
-HOTP and TOTP are both implemented in CanoKey Pigeon and Canokey epoxy editions.
+HOTP and TOTP are both implemented in CanoKey Pigeon and Canokey epoxy editions. CanoKey can hold up to 100 OATH tokens.
 
 ## Firmware version 1.5 and newer (For example, CanoKey Pigeon).
 
-You should use `ykman` command to configure OATH and read OATH token.
+You should use `ykman` command version 4.0 or above to configure OATH and read OATH token.
 ### Setting up
 
 If your authentication provider provides you with a URI `otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM`, you should configure it by
