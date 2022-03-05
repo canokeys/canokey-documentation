@@ -17,7 +17,7 @@ Personal Identity Verification (PIV) is a US government standard defined as [FIP
 
 * PIN: default 123456
 * PUK: default 12345678
-* Management Key (Known as `Security Officer PIN` or `SO pin` in pkcs11): default 010203040506070801020304050607080102030405060708
+* Management Key: default 010203040506070801020304050607080102030405060708
 
 ## User guide
 
