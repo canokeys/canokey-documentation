@@ -117,3 +117,16 @@ You should setup `ccid` as in [setup](https://docs.canokeys.org/userguide/setup/
 You may use `pcsc_scan` to check whether the smart card is detected by `pcscd`. Note that `pcscd` only uses the first smart card it detects, hence if you have other smart card readers in your box, you should remove or disable them first.
 
 You can use `pcscd -a -d -f` to monitor the status of card reader and the communication. The log of it may be reported for troubleshooting.
+
+## Preemption problem
+
+If you get output below when use OpenPGP SmartCard function,
+
+```
+gpg: selecting card failed: No such device
+gpg: OpenPGP card not available: No such device
+```
+Check that you have Firefox opened and you are using Windows or installed opensc in Linux.
+
+If you are sure, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework".
+You can click on it and click "unload" or just uninstall opensc (Linux only) and it will be fixed.
