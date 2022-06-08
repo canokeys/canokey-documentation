@@ -19,6 +19,11 @@ Personal Identity Verification (PIV) is a US government standard defined as [FIP
 * PUK: default 12345678
 * Management Key: default 010203040506070801020304050607080102030405060708
 
+### Maximum certification size
+
+* Firmware 1.5 and older: 1000B
+* Firmware 1.6.0 and newer: 3kB
+
 ## User guide
 
 The following user guide was written with `yubico-piv-tool` version 2.2.1 and `opensc` version 0.22.0 under Linux.
