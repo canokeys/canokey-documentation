@@ -16,7 +16,7 @@ Supported features:
 
 ## Multi-Factor Authentication
 
-You can use your CanoKey as a 2FA device on many [websites](https://www.dongleauth.info/).
+You can use your CanoKey as a 2FA device on many [websites](https://2fa.directory/int/).
 
 ## PIN
 

@@ -16,7 +16,7 @@ CanoKey 的 FIDO2/U2F 功能遵循 [CTAP2.0](https://fidoalliance.org/specs/fido
 
 ## 多因素认证
 
-CanoKey 可以用于很多[网站](https://www.dongleauth.info/)的双因素认证。
+CanoKey 可以用于很多[网站](https://2fa.directory/int/)的双因素认证。
 
 ## PIN
 
