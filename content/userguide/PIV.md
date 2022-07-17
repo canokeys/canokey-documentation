@@ -148,6 +148,10 @@ To use PIV SSH on Windows, you can try
 - [OpenSSH](https://github.com/PowerShell/Win32-OpenSSH) and [OpenSC](https://github.com/OpenSC/OpenSC), and the above instructions will work too. Or
 - [WinCryptSSHAgent](https://github.com/buptczq/WinCryptSSHAgent)
 
+{{% notice note %}}
+Using PIV SSH on Windows, `NIST P-256` and `NIST P-384` keys are possibly incompatible. If you can't find your public keys with both methods, try `RSA2048` instead. 
+{{% /notice %}}
+
 ### Importing `.pfx` key&cert
 
 A `.pfx` file may contain both private key and certificate. In this example, we import `credential.pfx` to slot `9d`.
