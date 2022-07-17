@@ -26,7 +26,7 @@ Personal Identity Verification (PIV) is a US government standard defined as [FIP
 
 ## User guide
 
-The following user guide was written with `yubico-piv-tool` version 2.2.1 and `opensc` version 0.22.0 under Linux.
+The following user guide was written with `yubico-piv-tool` version 2.2.1, `ykman` version 4.0.7 and `opensc` version 0.22.0 under Linux.
 
 ### Initial PIV on your card
 
@@ -39,7 +39,11 @@ yubico-piv-tool -r canokeys -a set-chuid
 
 ### Generating keys and certificates
 
-In this example, we are generating a key with NIST P-384 algorithm and name the public key as public384.pem.
+You can either use `yubico-piv-tool` or `ykman`.
+
+#### Using `yubico-piv-tool`
+
+In this example, we are generating a key with NIST P-384 algorithm. The private key is secured in Canokey and the public key will be written into `public384.pem`. 
 
 ```
 $ yubico-piv-tool -r canokeys -s 9a -a generate -A ECCP384 -o public384.pem
@@ -66,6 +70,26 @@ If you want to verify your key is there, you can do so by
 
 ```
 $ yubico-piv-tool -r canokeys -a read-certificate  -s 9a
+```
+
+#### Using `ykman`
+
+This works with `ykman` version 4.0 or above. Similarly, we first generate a new key pair with NIST P-384 algorithm. The public key will be written into `public384.pem`.
+
+```
+$ ykman -r canokeys piv keys generate -a ECCP384 9a public384.pem
+```
+
+Then generate the certificate for that key. The certificate will be store on Canokey, so you don't need to import it again as using `yubico-piv-tool`. We are taking SSH key as an example, and the certificate is valid for 3 years (`-d 1095`).
+
+```
+$ ykman -r canokeys piv certificates generate -d 1095 -s "CN=SSH Key" 9a public384.pem
+```
+
+To verify your certificates on Canokey, you can try
+
+```
+$ ykman -r canokeys piv info
 ```
 
 ### Authentication with SSH
@@ -115,6 +139,25 @@ Enter PIN for 'SSH key':
 X11 forwarding request failed on channel 0
 Last login: Thu Jan 20 22:57:23 2022 from 192.168.1.246
 [user@remote ~]$ 
+```
+
+#### On Windows
+
+To use PIV SSH on Windows, you can try
+
+- [OpenSSH](https://github.com/PowerShell/Win32-OpenSSH) and [OpenSC](https://github.com/OpenSC/OpenSC), and the above instructions will work too. Or
+- [WinCryptSSHAgent](https://github.com/buptczq/WinCryptSSHAgent)
+
+{{% notice note %}}
+Using PIV SSH on Windows, `NIST P-256` and `NIST P-384` keys are possibly incompatible. If you can't find your public keys with both methods, try `RSA2048` instead. 
+{{% /notice %}}
+
+### Importing `.pfx` key&cert
+
+A `.pfx` file may contain both private key and certificate. In this example, we import `credential.pfx` to slot `9d`.
+
+```
+$ yubico-piv-tool -r canokeys -a verify-pin -s 9d -i "credential.pfx" -K PKCS12 -a import-key -a import-cert
 ```
 
 ## Resetting the PIV applet
