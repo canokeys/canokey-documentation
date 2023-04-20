@@ -33,7 +33,7 @@ Note that RSA3072 is not supported currently.
 
 ## Touch Policy
 
-There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in the admin applet in the web console or via the `gpg` command. The value of touch cache time is in between 0 and 255 seconds (0 means no cache).
+There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in the admin applet in the web console or via the `ckman`(a ykman fork) command. The value of touch cache time is in between 0 and 255 seconds (0 means no cache).
 
 ### Firmware Version <= 1.4
 
