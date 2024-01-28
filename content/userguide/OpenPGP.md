@@ -126,7 +126,6 @@ If you get output below when use OpenPGP SmartCard function,
 gpg: selecting card failed: No such device
 gpg: OpenPGP card not available: No such device
 ```
-Check that you have Firefox opened and you are using Windows or installed opensc in Linux.
+Check that you have browser (include electron and thunderbird) opened and you are using Windows or installed opensc in Linux.
 
-If you are sure, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework".
-You can click on it and click "unload" or just uninstall opensc (Linux only) and it will be fixed.
+If you are sure, just uninstall opensc (Linux only) and it will be fixed. Or if it's firefox, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework". You can click on it and click "unload"
