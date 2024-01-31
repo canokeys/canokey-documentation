@@ -126,7 +126,8 @@ If you get output below when use OpenPGP SmartCard function,
 gpg: selecting card failed: No such device
 gpg: OpenPGP card not available: No such device
 ```
-Check that you have Firefox opened and you are using Windows or installed opensc in Linux.
+Check that you have browsers (including Electron and thunderbird) opened and you are using Windows or installed OpenSC in Linux.
 
-If you are sure, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework".
-You can click on it and click "unload" or just uninstall opensc (Linux only) and it will be fixed.
+If you are sure, uninstall OpenSC (Linux only) or disable the PIV feature of Canokey (if you don't use PIV), and it will be fixed. Or if it's Firefox, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework". You can click on it and click "unload"
+
+Another solution is to add `pcsc-shared` in `scdaemon.conf`. But it will lead to asking PIN every time when you use GnuPG 2.4+.
