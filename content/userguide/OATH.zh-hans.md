@@ -63,17 +63,17 @@ You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium
 * If there is no error, there will be a green box with 'TOTP code is xxxxxx' shown in the bottom left of your web page.
 
 
-## Optionally: Enable touch to input for HOTP
+## 可选：为 HOTP 启用触摸输入
 
-If you are using HOTP and you want to make your CanoKey input your HOTP token every time you touch the key, you should 
+如果您正在使用 HOTP，并希望让 CanoKey 在您每次触摸按键时都能键入 HOTP 令牌，您应该  
 
-* Go to [Admin Applet](https://console.canokeys.org/admin) of the web console and connect your CanoKey.
-* If you haven't connected your CanoKey to the web console, click 'CONNECT' on the top right corner and select your CanoKey from the prompt dialog.
-* Click AUTHENTICATE and input your admin applet password to authenticate as admin user
-* Enable 'HOTP on touch' in the Config section, then you'll see a green box with 'HOTP on touch is on' shown in the bottom left of the web page.
-* Go to [OATH Applet](https://console.canokeys.org/oath) of the web console
-* Click the star icon '٭' on the line of HOTP you want to use. This will make the HOTP token default.
-* Click DISCONNECT on the top right corner
-* Unplug and plug in your CanoKey again.
-Now you can press the touch area to input your default HOTP token.
+* 进入网络控制台的[Admin Applet](https://console.canokeys.org/admin)，连接 CanoKey。
+* 如果尚未将 CanoKey 与网络控制台连接，请单击右上角的 "CONNECT"，然后在提示对话框中选择您的 CanoKey。
+* 单击 "AUTHENTICATE"并输入管理员小程序密码，以管理员用户身份进行认证
+* 在 " Config"部分启用 "HOTP on touch"，然后就会在网页左下方看到一个绿色方框，上面显示 "HOTP on touch is on"。
+* 进入网络控制台的[OATH Applet](https://console.canokeys.org/oath)
+* 点击要使用的 HOTP 行上的星形图标"٭"。这将使该 HOTP 标记成为默认值
+* 点击右上角的DISCONNECT
+* 拔下并重新插入 CanoKey。
+现在您可以按触摸区域键入默认的 HOTP 令牌。
 

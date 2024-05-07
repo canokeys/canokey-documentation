@@ -117,16 +117,17 @@ You may use `pcsc_scan` to check whether the smart card is detected by `pcscd`. 
 
 You can use `pcscd -a -d -f` to monitor the status of card reader and the communication. The log of it may be reported for troubleshooting.
 
-## Preemption problem
+## 抢占问题
 
-If you get output below when use OpenPGP SmartCard function,
+使用 OpenPGP 智能卡功能时，如果得到以下输出结果、
 
 ```
 gpg: selecting card failed: No such device
 gpg: OpenPGP card not available: No such device
 ```
-Check that you have browsers (including Electron and thunderbird) opened and you are using Windows or installed OpenSC in Linux.
+检查是否已打开浏览器（包括 Electron 和 thunderbird），是否使用 Windows 或在 Linux 中安装了 OpenSC。
 
-If you are sure, uninstall OpenSC (Linux only) or disable the PIV feature of Canokey (if you don't use PIV), and it will be fixed. Or if it's Firefox, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework". You can click on it and click "unload"
 
-Another solution is to add `pcsc-shared` in `scdaemon.conf`. But it will lead to asking PIN every time when you use GnuPG 2.4+.
+如果确定的话，卸载 OpenSC（仅限 Linux）或禁用 Canokey 的 PIV 功能（如果不使用 PIV），问题就会解决。如果是 Firefox，则可以进入 "Firefox > Preferences > Privacy&Security > Certificates"，然后可以看到 "OpenSC Smartcard framework"。你可以点击它，然后点击 "unload"。
+
+另一种解决方案是在 `scdaemon.conf` 中添加 `pcsc-shared`。但这将导致在使用 GnuPG 2.4+ 时每次都要询问 PIN 码。
