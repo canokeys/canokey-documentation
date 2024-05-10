@@ -14,7 +14,6 @@ You may use the Admin panel in web console to control some behavior of the key.
 
 * PIN: default 123456
 * LED: default ON
-* Keyboard: default OFF
 
 ## Reset
 
