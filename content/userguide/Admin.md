@@ -18,16 +18,8 @@ You may use the Admin panel in web console to control some behavior of the key.
 
 ## Reset
 
-**Make sure that your admin applet has been locked, that is no "retries left" in the prompt message.**
-Then go to the APDU console and send `00500000055245534554`.
-Note that the LED of CanoKey will flash.
-When it is flashing, touch the pad.
-Repeat that until it stops flashing.
+In the Settings app of the Web Console, click "Reset", the LED indicator of CanoKey will flash. When flashing, touch the key.
+
+Repeat the above operation until it stops flashing.
 
 **All data will be erased**
-
-确定PIN验证失败的消息中没有 retries left，然后直接进入 APDU console，输入 00500000055245534554 并发送。
-CanoKey 的 LED 灯会闪烁，摸触摸盘。
-反复直到它不再闪烁即可。
-
-**所有数据会被清空**
