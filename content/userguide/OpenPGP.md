@@ -11,16 +11,13 @@ The private key can be stored in CanoKey, or you can use CanoKey to generate a O
 ## Supported algorithm
 
 * RSA2048
-* RSA4096\*
+* RSA3072
+* RSA4096
 * X25519
 * Ed25519
 * NIST P-256 (secp256r1, prime256v1)
 * NIST P-384 (secp384r1)
 * secp256k1
-
-\* Due to the limitation of computing performance, RSA4096 cannot be generated in the card. However, you can generate the key pair and import it to CanoKey.
-
-Please note that RSA3072 and Curve25519 are not supported at this time, and RSA4096 will not display a counter when decrypted.
 
 ## Default values
 
