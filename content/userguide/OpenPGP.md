@@ -20,7 +20,7 @@ The private key can be stored in CanoKey, or you can use CanoKey to generate a O
 
 \* Due to the limitation of computing performance, RSA4096 cannot be generated in the card. However, you can generate the key pair and import it to CanoKey.
 
-Note that RSA3072 is not supported currently.
+Please note that RSA3072 and Curve25519 are not supported at this time, and RSA4096 will not display a counter when decrypted.
 
 ## Default values
 
