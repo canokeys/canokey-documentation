@@ -148,9 +148,9 @@ Last login: Thu Jan 20 22:57:23 2022 from 192.168.1.246
 - [OpenSSH](https://github.com/PowerShell/Win32-OpenSSH) and [OpenSC](https://github.com/OpenSC/OpenSC), and the above instructions will work too. Or
 - [WinCryptSSHAgent](https://github.com/buptczq/WinCryptSSHAgent)
 
-{{% 注意事项 %}}
+{{% notice note %}}
 在Windows上使用 PIV SSH, `NIST P-256` 和 `NIST P-384` 可能会不兼容. 如果您依旧无法通过以上两种方法找到您的公钥, 请使用`RSA2048`. 
-{{% /注意事项%}}
+{{% /notice %}}
 
 ### 导入`.pfx` 密钥&证书
 
