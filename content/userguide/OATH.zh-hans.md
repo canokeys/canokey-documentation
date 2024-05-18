@@ -73,7 +73,7 @@ You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium
 * 在 " Config"部分启用 "HOTP on touch"，然后就会在网页左下方看到一个绿色方框，上面显示 "HOTP on touch is on"。
 * 进入网络控制台的[OATH Applet](https://console.canokeys.org/oath)
 * 点击要使用的 HOTP 行上的星形图标"٭"。这将使该 HOTP 标记成为默认值
-* 点击右上角的DISCONNECT
+* 点击右上角的 DISCONNECT
 * 拔下并重新插入 CanoKey。
 现在您可以按触摸区域键入默认的 HOTP 令牌。
 

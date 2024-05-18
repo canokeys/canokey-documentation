@@ -42,7 +42,7 @@ ssh-keygen -t ed25519-sk
 
 可能用到的应用有：
 
-- [khefin](https://github.com/mjec/khefin)， 用于 LUKS 全盘加密。
+- [khefin](https://github.com/mjec/khefin)，用于 LUKS 全盘加密。
 - [systemd v248+](http://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html)，用于 LUKS 全盘加密
 
   {{% notice note %}}

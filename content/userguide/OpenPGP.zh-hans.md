@@ -23,10 +23,10 @@ weight = 20
 
 * PIN: 默认为 123456, 最小长度为 6, 最大长度为  64
 * Admin PIN: 默认为  12345678, 最小长度为  8, 最大长度为  64
-* Reset Code: 默认没有设置, 最小长度为  8, 最大长度为  64
+* Reset Code: 默认没有设置，最小长度为  8, 最大长度为  64
 * Signature PIN : forced // 即每次签名都要验证密码
-* 触摸策略:  SIG, DEC, AUT 为 OFF
-* 触摸缓存时间: 0
+* 触摸策略：SIG, DEC, AUT 为 OFF
+* 触摸缓存时间：0
 
 ## 触摸策略
 
@@ -39,13 +39,13 @@ Touch policy is configured through the admin applet. The technical details can b
 
 触摸策略是通过 the User Interaction Flag（OpenPGP 规范第 4.4.3.6 部分）实现的。请使用最新的 GnuPG 进行配置。
 
-**触摸策略仅适用于使用 USB 接口时.**
+**触摸策略仅适用于使用 USB 接口时。**
 
 ## PIN 策略
 
 对于 DEC 和 AUT，在成功验证 PIN 码后，PIN 码在整个开机过程中始终有效。
 
-对于 SIG，如果flag `forcesig` 打开，则每次签名都要求输入 PIN；否则，只在开机后的第一次签名时要求输入 PIN。
+对于 SIG，如果 flag `forcesig` 打开，则每次签名都要求输入 PIN；否则，只在开机后的第一次签名时要求输入 PIN。
 
 ## 使用 GnuPG
 
