@@ -1,23 +1,22 @@
-# Documentation for CanoKey
-
-Use the most advanced WebAuthn and other technologies to protect your accounts. Online and offline.
+# CanoKey User Documentation
 
 ## Contents
 
 - [User Guide](userguide/)
-- [Development](development/)
+- [Development Guide](development/)
 
-## Products and hardware version
+## Product and Hardware Versions
 
-As of Auguest 2022, two commercial products and two developer hardware are available from CanoKey project. They uses the same core, which is [canokey-core](https://github.com/canokeys/canokey-core).
+As of September 2022, the CanoKey project offers three products and two developer reference hardware. They use the same core library - [canokey-core](https://github.com/canokeys/canokey-core).
 
-* **CanoKey Pigeon**: This is the commercial version currently on sale. It has a plastic shell.
-* **CanoKey Epoxy**: This is the early-bird commercial version. It is wrapped with transparent epoxy.
-* **CanoKey STM32**: This is the reference developer hardware. We don't sell this as a product. It uses an open source friendly MCU which is easier for developers. The hardware design is open source, available [here](https://github.com/canokeys/canokey-stm32). This version is mainly used for developing purpose.
-* **CanoKey nRF52**: This version is developed for the reason that some of the hobbyists want to play with open source version but does not want to made the hardware on his or her own. It uses nRF52840 chip, of which there are lots of ready-made USB dongles on the market. We don't sell this as a product. The firmware design is open source, available [here](https://github.com/canokeys/canokey-nrf52). This version is mainly used for developing purpose.
+* **CanoKey Canary**: This is the upcoming version. It uses a USB Type C interface.
+* **CanoKey Pigeon**: This is the currently available version. It uses a USB Type A interface.
+* **CanoKey Epoxy**: This version is no longer available. Its appearance is made of transparent epoxy.
+* **CanoKey STM32**: This version has never been sold and is only for development testing. The hardware design of this version is open-source and can be obtained [here](https://github.com/canokeys/canokey-stm32). **Please note that this version cannot provide any security assurances; anyone with access to the device can obtain the plaintext keys.**
+* **CanoKey nRF52**: This version has never been sold and is only for development testing. It uses the nRF52840 chip, and various USB devices based on this chip are easily available. The open-source firmware for this version can be obtained [here](https://github.com/canokeys/canokey-nrf52). **Please note that this version cannot provide any security assurances; anyone with access to the device can obtain the plaintext keys.**
 
-In order to make crypto operations faster, the commercial versions **use different MCU** than the developer hardware (CanoKey STM32 and CanoKey nRF52). In such way, users benefit from faster encrypting/decrypting/signing operations when use commercial versions.
+The retail versions use the HED CIU98320B chip as the MCU, which has passed EAL4+ certification. **Non-retail versions cannot provide any security assurances; anyone with access to the device can obtain the plaintext keys, and are only for development testing.**
 
-## Contribute to this documentation
+## Contribution Method
 
-Feel free to update this content. Just fork [this repo](https://github.com/canokeys/canokey-documentation) and send pull request to it.
+We welcome contributions to this document. Please fork the [documentation](https://github.com/canokeys/canokey-documentation) and send a Pull Request.

@@ -6,22 +6,21 @@ chapter = true
 pre = "<b>1. </b>"
 +++
 
-### Chapter 1
+# Chapter 1
 
-# User Guide
+## User Guide
 
-Quick start guides for users.
+Quick Start Guide
 
-## Information about PINs
+## Default Passwords
 
-You might meet several PINs when using CanoKeys. Here is a list to help you distinguish different PIN.
+During the use of CanoKey, users will encounter various PINs. This page lists all default passwords and descriptions, aiming to help users distinguish different PINs.
 
-| PIN Name | Default value | Description |
-| :------- | :-----------: | :---------- |
-| Admin PIN | 123456| The pin to manage each applet and access admin functions on Web Console. For example, reset individual applet, change touch policy. |
-| FIDO2 PIN |  | The pin requested by PIN-enabled FIDO2/U2F application. The PIN is not set by default. When any of the websites require a PIN for your FIDO authentication, you are prompted to set your PIN yourself. |
-| GPG PIN | 123456 | The PIN to do normal GPG actions, for example, GPG signing. |
-| GPG Admin PIN | 12345678 | The PIN to manage your GPG applet. For example, generate a GPG keypair oncard, change default GPG key-attr. |
-| PIV PIN | 123456 | The PIN to do normal PIV actions, for example, PIV authentication or signing using PKCS#11. |
-| PIV PUK | 12345678 | The password to reset your PIN when your PIN has been locked. |
-
+| PIN Name           | Default Value | Description |
+| :----------------- | :-----------: | :---------- |
+| Admin PIN          | 123456        | Used to manage different applications on CanoKey, such as resetting applications, modifying NDEF configurations, etc. |
+| FIDO2 PIN          | No default value | Some FIDO2 applications that enforce PIN usage will ask for this password. FIDO2 PIN has no preset value. Users will be prompted to set the FIDO2 PIN when they first use a FIDO2 application that forces PIN usage, at which point the user can set this PIN themselves. |
+| OpenPGP PIN        | 123456        | Used for regular OpenPGP operations, such as OpenPGP signing, etc. |
+| OpenPGP Admin PIN  | 12345678      | Used for management operations of the OpenPGP application. For example, it is required when generating an OpenPGP key pair on CanoKey or modifying OpenPGP key attributes. |
+| PIV PIN            | 123456        | Used for regular PIV operations, such as PIV identity verification, signing through PKCS#11 call to PIV, etc. |
+| PIV PUK            | 12345678      | Used to unlock the PIV PIN if the PIV PIN gets locked. |

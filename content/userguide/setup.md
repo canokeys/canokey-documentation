@@ -4,13 +4,35 @@ date =  2020-07-04T15:16:45+08:00
 weight = 5
 +++
 
-This section describes what you need to do before you get started using your CanoKey.
+This section introduces the necessary settings required to use CanoKey.
+
+## Windows
+
+It can be used without configuration.
+
+## macOS
+
+### Big Sur and earlier
+
+Please compile and install the latest version of the [ccid driver](https://ccid.apdu.fr/).
+
+### Monterey, Ventura
+
+It can be used without configuration.
+
+### Sonoma and later
+
+CanoKey Pigeon users need to compile and install the latest version of the [ccid driver](https://ccid.apdu.fr/).
+
+CanoKey Canary users can use it without configuration.
 
 ## Linux
 
+Linux users can perform the following configuration for easier use.
+
 ### udev
 
-In order to allow non-root user use the key, you need to add a `udev` rule into `/etc/udev/rules.d/69-canokeys.rules`
+The addition of `udev` rules is to use it without root users, please create `/etc/udev/rules.d/69-canokeys.rules` and fill in the following content.
 
 ```
 # GnuPG/pcsclite
@@ -33,54 +55,14 @@ SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", MODE:="0666"
 #SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", TAG+="uaccess"
 ```
 
-`TAG+="uaccess"` is more systemd related while `GROUP="plugdev", MODE="0660"` is more traditional. You can choose either solution of them.
+`TAG+="uaccess"` is more inclined to systemd, while `GROUP="plugdev", MODE="0660"` is more traditional. You can choose either solution.
 
-After adding this file, run the follow commands to apply changes.
+After adding this file, run the following command to apply the changes.
 
 ```
 udevadm control --reload-rules && udevadm trigger
 ```
 
-### ccid
+### CCID
 
-CanoKey has already been [included in ccid](https://salsa.debian.org/rousseau/CCID/-/commit/7a306c8da4872617dbc9a2cf6a8f7e827a6b3c38) since 1.4.34. Make sure you are using `ccid` version 1.4.34 or newer.
-
-If you do not want to/could not install version 1.4.34 or newer of `ccid`, you should check your `/etc/libccid_Info.plist` whether `canokey` is inside.
-If not,  make the following changes to `/etc/libccid_Info.plist`.
-
-For array `ifdVendorID`, `ifdProductID`, and `ifdFriendlyName`, append some value respectively, like the following `diff`
-
-```
-diff --git a/libccid_Info.plist b/libccid_Info.plist
-index 05c0208..33a1779 100644
---- a/libccid_Info.plist
-+++ b/libccid_Info.plist
-@@ -576,6 +576,7 @@
-                <string>0x08C3</string>
-                <string>0x15E1</string>
-                <string>0x062D</string>
-+               <string>0x20A0</string>
-        </array>
- 
-        <key>ifdProductID</key>
-@@ -1054,6 +1055,7 @@
-                <string>0x0402</string>
-                <string>0x2007</string>
-                <string>0x0001</string>
-+               <string>0x42D4</string>
-        </array>
- 
-        <key>ifdFriendlyName</key>
-@@ -1532,6 +1534,7 @@
-                <string>Precise Biometrics Precise 200 MC</string>
-                <string>RSA RSA SecurID (R) Authenticator</string>
-                <string>THRC Smart Card Reader</string>
-+               <string>CanoKey</string>
-        </array>
- 
-        <key>Copyright</key>
-``` 
-
-### libfido2
-
-`libfido2` is for FIDO2/U2F related programs. Other dependencies may be checked by guides from Yubico.
+Please use ccid version 1.4.34 or later.

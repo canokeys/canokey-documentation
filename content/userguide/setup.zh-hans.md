@@ -8,13 +8,23 @@ weight = 5
 
 ## Windows
 
-通常，Windows 用户无需任何配置即可使用。
+无需配置即可使用。
 
 ## macOS
 
-使用 macOS Monterey 及更新版本的用户不需要额外配置。如您使用旧版 macOS，需要手动配置 CCID 白名单。方法如下：
+### Big Sur 及之前
 
-待确认
+请编译安装最新版本的 [ccid 驱动程序](https://ccid.apdu.fr/)。
+
+### Monterey、Ventura
+
+无需配置即可使用。
+
+### Sonoma 及之后
+
+CanoKey Pigeon 用户需编译安装最新版本的 [ccid 驱动程序](https://ccid.apdu.fr/)。
+
+CanoKey Canary 用户无需配置即可使用。
 
 ## Linux
 
@@ -45,9 +55,9 @@ SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", MODE:="0666"
 #SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", TAG+="uaccess"
 ```
 
-`TAG+="uaccess"` is more systemd related while `GROUP="plugdev", MODE="0660"` is more traditional. You can choose either solution of them.
+`TAG+="uaccess"` 更偏向于 systemd，而 `GROUP="plugdev", MODE="0660"` 更偏传统。你可以选择任意一种解决方案。
 
-After adding this file, run the follow commands to apply changes.
+添加此文件后，运行以下命令以应用更改。
 
 ```
 udevadm control --reload-rules && udevadm trigger
@@ -55,8 +65,4 @@ udevadm control --reload-rules && udevadm trigger
 
 ### CCID
 
-使用 ccid 1.4.34 或更新的版本即可。
-
-### libfido2
-
-`libfido2` is for FIDO2/U2F related programs. Other dependencies may be checked by guides from Yubico.
+请使用 ccid 1.4.34 或更新的版本。
