@@ -125,7 +125,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub username@remote_host
 
 Please refer to [pam-u2f](https://developers.yubico.com/pam-u2f/).
 
-## 2.4 HMAC-secret Extension
+### 2.4 HMAC-secret Extension
 
 - [systemd-cryptenroll](http://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html), used for LUKS full-disk encryption
 
