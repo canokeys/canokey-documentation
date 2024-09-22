@@ -4,7 +4,7 @@ date =  2021-01-16T01:30:15+08:00
 weight = 15
 +++
 
-## Features
+## 1. Features
 
 CanoKey's WebAuthn functionality adheres to the [CTAP 2.1](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html), [CTAP 2.0](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html), and [U2F](https://fidoalliance.org/specs/fido-u2f-v1.0-ps-20141009/fido-u2f-hid-protocol-ps-20141009.html) standards.
 
@@ -13,14 +13,18 @@ Supported features include:
 - Up to 64 sets of discoverable credentials (resident keys)
 - HMAC extension support
 - Ed25519 algorithm
-- Support for Discoverable Credentials management (firmware version ≧ 2.0.0)
-- Support for PIN Protocol 2 (firmware version ≧ 2.0.0)
-- Support for Credential Blob (firmware version ≧ 2.0.0)
-- Support for Large Blob (firmware version ≧ 2.0.0)
 
-## Primary Uses
+From firmware version 2.0.0, CanoKey also supports the following features:
+- Discoverable Credentials management
+- PIN Protocol 2
+- Credential Blob
+- Large Blob
 
-### Multi-Factor Authentication
+From firmware version 3.0.0, CanoKey experimentally supports the SM2 algorithm.
+
+## 2. Primary Uses
+
+### 2.1 Multi-Factor Authentication
 
 CanoKey can be used for two-factor authentication on many [websites](https://2fa.directory/int/).
 
@@ -28,9 +32,9 @@ CanoKey can be used for two-factor authentication on many [websites](https://2fa
 By default, CanoKey does not set a PIN. Some websites and certain features (such as Discoverable Credentials management) require you to set a PIN. Please set it when prompted.
 {{% /notice %}}
 
-### SSH
+### 2.2 SSH
 
-#### 1. OpenSSH Version Requirement
+#### 2.2.1 OpenSSH Version Requirement
 
 To use FIDO keys for SSH authentication, ensure that the installed OpenSSH version supports this feature. The minimum version requirements are as follows:
 - OpenSSH 8.2 and above
@@ -42,7 +46,7 @@ ssh -V
 sshd -V
 ```
 
-#### 2. Using ECDSA-SK and ED25519-SK Key Pairs
+#### 2.2.2 Using ECDSA-SK and ED25519-SK Key Pairs
 
 ##### Creating ECDSA-SK and ED25519-SK Key Pairs
 
@@ -83,7 +87,7 @@ chmod 600 ~/.ssh/id_ecdsa_sk
 chmod 600 ~/.ssh/id_ed25519_sk
 ```
 
-#### 3. Using Discoverable Credential (Resident Key)
+#### 2.2.3 Using Discoverable Credential (Resident Key)
 
 {{% notice note %}}
 CanoKey firmware version must be at least 2.0.0.
@@ -117,11 +121,11 @@ Or
 ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub username@remote_host
 ```
 
-### PAM
+### 2.3 PAM
 
 Please refer to [pam-u2f](https://developers.yubico.com/pam-u2f/).
 
-## HMAC-secret Extension
+## 2.4 HMAC-secret Extension
 
 - [systemd-cryptenroll](http://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html), used for LUKS full-disk encryption
 

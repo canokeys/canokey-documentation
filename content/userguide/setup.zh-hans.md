@@ -6,35 +6,39 @@ weight = 5
 
 本节介绍了使用 CanoKey 所需的必要设置。
 
-## Windows
+## 1. Windows
 
 无需配置即可使用。
 
-## macOS
+## 2. macOS
 
-### Big Sur 及之前
+### 2.1 Big Sur 及之前
 
 请编译安装最新版本的 [ccid 驱动程序](https://ccid.apdu.fr/)。
 
-### Monterey、Ventura
+### 2.2 Monterey、Ventura
 
 无需配置即可使用。
 
-### Sonoma 及之后
+### 2.3 Sonoma 及之后
 
 CanoKey Pigeon 用户需编译安装最新版本的 [ccid 驱动程序](https://ccid.apdu.fr/)。
 
 CanoKey Canary 用户无需配置即可使用。
 
-### pcsc-tools
+### 2.4 pcsc-tools
 
 pcsc-tools 提供 `pcsc_scan` 命令以便快速排查 PC/SC 驱动问题。
 
-## Linux
+```sh
+brew install pcsc-lite
+```
+
+## 3. Linux
 
 Linux 用户可以执行如下配置，以更方便使用。
 
-### udev
+### 3.1 udev
 
 `udev` 规则的增加是为了在非 root 用户下使用，请创建 `/etc/udev/rules.d/69-canokeys.rules` 并填入以下内容。
 
@@ -67,10 +71,10 @@ SUBSYSTEMS=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="42d4", MODE:="0666"
 udevadm control --reload-rules && udevadm trigger
 ```
 
-### CCID
+### 3.2 CCID
 
 请使用 ccid 1.4.34 或更新的版本。
 
-### pcsc-tools
+### 3.3 pcsc-tools
 
 pcsc-tools 提供 `pcsc_scan` 命令以便快速排查 PC/SC 驱动问题。

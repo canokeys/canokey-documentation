@@ -6,35 +6,39 @@ weight = 5
 
 This section introduces the necessary settings required to use CanoKey.
 
-## Windows
+## 1. Windows
 
 It can be used without configuration.
 
-## macOS
+## 2. macOS
 
-### Big Sur and earlier
+### 2.1 Big Sur and earlier
 
 Please compile and install the latest version of the [ccid driver](https://ccid.apdu.fr/).
 
-### Monterey, Ventura
+### 2.2 Monterey and Ventura
 
 It can be used without configuration.
 
-### Sonoma and later
+### 2.3 Sonoma and later
 
 CanoKey Pigeon users need to compile and install the latest version of the [ccid driver](https://ccid.apdu.fr/).
 
 CanoKey Canary users can use it without configuration.
 
-### pcsc-tools
+### 2.4 pcsc-tools
 
 pcsc-tools provides the `pcsc_scan` command for quickly troubleshooting PC/SC driver issues.
 
-## Linux
+```sh
+brew install pcsc-lite
+```
+
+## 3. Linux
 
 Linux users can perform the following configuration for easier use.
 
-### udev
+### 3.1 udev
 
 The aim of udev rules are to allow users without root privileges to use it. Please create `/etc/udev/rules.d/69-canokeys.rules` and fill in the following content.
 
@@ -67,10 +71,10 @@ After adding this file, run the following command to apply the changes.
 udevadm control --reload-rules && udevadm trigger
 ```
 
-### CCID
+### 3.2 CCID
 
 Please use ccid version 1.4.34 or later.
 
-### pcsc-tools
+### 3.3 pcsc-tools
 
 pcsc-tools provides the `pcsc_scan` command for quickly troubleshooting PC/SC driver issues.

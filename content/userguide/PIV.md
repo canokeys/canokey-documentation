@@ -4,162 +4,127 @@ date =  2020-07-11T22:33:15+08:00
 weight = 25
 +++
 
-Personal Identity Verification (PIV) is a US government standard defined as [FIPS 201](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.201-2.pdf). PIV uses a smartcard to store the key for signing / encryption. PIV is mainly used in non-web scenarios.
+PIV (Personal Identity Verification) is defined by the US federal government [FIPS 201](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.201-2.pdf) standard. PIV can store keys and certificates for signing and encryption, enabling functions such as digital signatures and file encryption.
 
-## Basic information
-### Supported algorithm
+## 1. Basic Information
+
+### 1.1 Supported Algorithms
 
 * RSA2048
 * NIST P-256
 * NIST P-384
 
-### Default values
+Starting from CanoKey Canary, the following extended algorithms are also supported:
 
-* PIN: default 123456
-* PUK: default 12345678
-* Management Key: default 010203040506070801020304050607080102030405060708
+| Algorithm Name | Algorithm ID |
+|:---------------|:-------------|
+| RSA3072        | 05           |
+| RSA4096        | 16           |
+| secp256k1      | 53           |
+| Ed25519        | E0           |
+| X25519         | E1           |
+| SM2            | 54           |
 
-### Maximum certification size
+### 1.2 Default Values
 
-* Firmware 1.5 and older: 1000B
-* Firmware 1.6.0 and newer: 3kB
+* PIN: 123456
+* PUK: 12345678
+* Management Key: `010203040506070801020304050607080102030405060708`
 
-## User guide
+### 1.3 Key Slots
 
-The following user guide was written with `yubico-piv-tool` version 2.2.1, `ykman` version 4.0.7 and `opensc` version 0.22.0 under Linux.
+CanoKey supports the following key slots:
 
-### Initial PIV on your card
+* 9A: PIV Authentication
+* 9E: Card Authentication
+* 9C: Digital Signature
+* 9D: Key Management
 
-Usually, before you start to use PIV of Canokey, you should initial the Cardholder Unique Identifier (CHUID) and Cardholder Capability Container (CCC)
+Starting from firmware version 2.0.0, CanoKey also supports the following key slots:
 
-```
-yubico-piv-tool -r canokeys -a set-ccc
-yubico-piv-tool -r canokeys -a set-chuid
-```
+* 82, 83
 
-### Generating keys and certificates
+### 1.4 PIN and Touch Policies
 
-You can either use `yubico-piv-tool` or `ykman`.
+#### PIN Policy
+* Never: Never verify PIN
+* Always: Verify PIN for every use
+* Once: Verify PIN once per session
 
-#### Using `yubico-piv-tool`
+#### Touch Policy
+* Never: Never require touch
+* Always: Require touch for every use
+* Cached: No touch required if touched within the last 15 seconds, otherwise touch is required
 
-In this example, we are generating a key with NIST P-384 algorithm. The private key is secured in Canokey and the public key will be written into `public384.pem`. 
-
-```
-$ yubico-piv-tool -r canokeys -s 9a -a generate -A ECCP384 -o public384.pem
-Successfully generated a new private key.
-```
-
-Then generate the certificate for that key. We are taking SSH key as an example and exporting the certificate as cert.pem.
-
-```
-$ yubico-piv-tool -r canokeys -a verify-pin -a selfsign-certificate -s 9a -S "/CN=SSH key/" -i public384.pem -o certificate.pem
-Enter PIN: 
-Successfully verified PIN.
-Successfully generated a new self signed certificate.
-```
-
-And now we can import the certificate.
-
-```
-$ yubico-piv-tool -r canokeys -a import-certificate -s 9a -i certificate.pem
-Successfully imported a new certificate.
-```
-
-If you want to verify your key is there, you can do so by
-
-```
-$ yubico-piv-tool -r canokeys -a read-certificate  -s 9a
-```
-
-#### Using `ykman`
-
-This works with `ykman` version 4.0 or above. Similarly, we first generate a new key pair with NIST P-384 algorithm. The public key will be written into `public384.pem`.
-
-```
-$ ykman -r canokeys piv keys generate -a ECCP384 9a public384.pem
-```
-
-Then generate the certificate for that key. The certificate will be store on Canokey, so you don't need to import it again as using `yubico-piv-tool`. We are taking SSH key as an example, and the certificate is valid for 3 years (`-d 1095`).
-
-```
-$ ykman -r canokeys piv certificates generate -d 1095 -s "CN=SSH Key" 9a public384.pem
-```
-
-To verify your certificates on Canokey, you can try
-
-```
-$ ykman -r canokeys piv info
-```
-
-### Authentication with SSH
-
-#### With ssh-agent
-
-Run `ssh-agent` with the pkcs11 provider. Here we use OpenSC. In the following example, the OpenSC library is available in /usr/lib64/opensc-pkcs11.so.
-
-```
-$ eval $(ssh-agent -P /usr/lib64/opensc-pkcs11.so)
-Agent pid 61757
-```
-
-And then add the key by
-
-```
-$ ssh-add -s /usr/lib64/opensc-pkcs11.so
-Enter passphrase for PKCS#11: 
-Card added: /usr/lib64/opensc-pkcs11.so
-```
-
-Now you can check your SSH public key.
-
-```
-$ ssh-add -L
-ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDydOf6U+9/hAknZnJckyFwoinXKVEjTZkVV7bKNDZs4XsaHUoQix3z3+LsVn9WsLKeAKtigv2GS/removed/Snip12345678901234567890123456789012/SnipSnip== PIV AUTH pubkey
-```
-
-Add the printed key to your remote machine by any of your preferred ways. Now you can ssh to your remote machine as usual.
-
-#### Without ssh-agent
-
-Without ssh-agent, you need to input the PIV pin each time you ssh to a machine.
-
-To check your SSH public key
-
-```
-ssh-keygen -D /usr/lib64/opensc-pkcs11.so  -e
-```
-
-Then copy the pub key to your remote machine by any of your preferred ways. Now ssh to your remote machine by providing the PKCS#11 library
-
-```
-$ ssh -I /usr/lib64/opensc-pkcs11.so remote.lan
-Warning: Permanently added 'remote.lan' (ED25519) to the list of known hosts.
-Enter PIN for 'SSH key': 
-X11 forwarding request failed on channel 0
-Last login: Thu Jan 20 22:57:23 2022 from 192.168.1.246
-[user@remote ~]$ 
-```
-
-#### On Windows
-
-To use PIV SSH on Windows, you can try
-
-- [OpenSSH](https://github.com/PowerShell/Win32-OpenSSH) and [OpenSC](https://github.com/OpenSC/OpenSC), and the above instructions will work too. Or
-- [WinCryptSSHAgent](https://github.com/buptczq/WinCryptSSHAgent)
+#### Default Policies
 
 {{% notice note %}}
-Using PIV SSH on Windows, `NIST P-256` and `NIST P-384` keys are possibly incompatible. If you can't find your public keys with both methods, try `RSA2048` instead. 
+Starting from firmware version 2.0.0, CanoKey supports configuring PIV PIN and touch policies.
 {{% /notice %}}
 
-### Importing `.pfx` key&cert
+| Key Slot | Default PIN Policy | Default Touch Policy |
+|:---------|:-------------------|:---------------------|
+| 9E       | Never              | Never                |
+| Others   | Once               | Never                |
 
-A `.pfx` file may contain both private key and certificate. In this example, we import `credential.pfx` to slot `9d`.
+### 1.5 Data Size Limitations
 
+* Certificate:
+  * Firmware version 1.5 or earlier: 1000 bytes
+  * Firmware version 1.6 or later: 3000 bytes
+* Card Capability Container: 287 bytes
+* Card Holder Unique Identifier: 2916 bytes
+* Printed Information: 245 bytes
+
+### 1.6 Other Features
+
+Starting from firmware version 2.0.0, CanoKey supports viewing PIV metadata.
+
+## 2. Common Operations
+
+{{% notice note %}}
+As PIV is typically issued by system administrators and used by regular users, please review the documentation to understand the following content before proceeding.
+{{% /notice %}}
+
+### 2.1 Tools
+
+It is recommended to use [yubico-piv-tool](https://developers.yubico.com/yubico-piv-tool/Releases/) for related operations.
+
+### 2.2 Importing Keys and Certificates Separately
+
+If the key and certificate are in two separate files, they need to be imported separately.
+
+Importing the private key:
+```sh
+yubico-piv-tool -r canokey -a import-key -s 9a -i private-key.pem
 ```
-$ yubico-piv-tool -r canokeys -a verify-pin -s 9d -i "credential.pfx" -K PKCS12 -a import-key -a import-cert
+
+Importing the certificate:
+```sh
+yubico-piv-tool -r canokey -a import-certificate -s 9a -i certificate.pem
 ```
 
-## Resetting the PIV applet
+Here, `-s 9a` indicates using the 9A key slot, which can be changed as needed.
 
-If your PIN and PUK both have been blocked, you can use `yubico-piv-tool -r canokeys -a reset` to reset the PIV applet. After that, all the PIV data has been erased in your Canokey. And your PIN, PUK and management key are all back to default. **Remember to initial the PIV again after the reset**.
+### 2.3 Importing PKCS#12 File
+
+To import a PKCS#12 file (.p12 or .pfx) containing both the private key and certificate, execute:
+```sh
+yubico-piv-tool -r canokey -a import-key -a import-certificate -K PKCS12 -s 9a -i certificate.p12
+```
+
+### 2.4 Generating Key and Self-signing
+
+Generate a new private key and self-sign it:
+```sh
+yubico-piv-tool -r canokey -a generate -s 9a -A RSA2048 -o public-key.pem
+yubico-piv-tool -r canokey -a verify-pin -a selfsign -s 9a -S "/CN=Test Certificate" -i public-key.pem -o certificate.pem
+yubico-piv-tool -r canokey -a import-certificate -s 9a -i certificate.pem
+```
+
+### 2.5 Additional Steps for Windows
+
+Since Windows caches certificate information based on CHUID, you need to update the CHUID after each certificate import on Windows:
+```sh
+yubico-piv-tool -r canokey -a set-chuid
+```

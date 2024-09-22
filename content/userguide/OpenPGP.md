@@ -6,9 +6,9 @@ weight = 20
 
 [OpenPGP](https://www.openpgp.org/) is a signature and encryption standard specified by [RFC4880](https://tools.ietf.org/html/rfc4880). This standard achieves information and file signing/encryption through the use of private keys. One of the commonly used OpenPGP tools is GNU Privacy Guard, often abbreviated as GnuPG or GPG. In Windows, you can also use [Kleopatra](https://www.openpgp.org/software/kleopatra/).
 
-## Basic Information
+## 1. Basic Information
 
-### Supported Algorithms
+### 2. Supported Algorithms
 
 * RSA2048
 * RSA3072
@@ -19,7 +19,7 @@ weight = 20
 * NIST P-384 (secp384r1)
 * secp256k1
 
-### Defaults
+### 1.2 Defaults
 
 * PIN: Default is 123456, minimum length is 6, maximum length is 64
 * Admin PIN: Default is 12345678, minimum length is 8, maximum length is 64
@@ -28,7 +28,12 @@ weight = 20
 * Touch Policy: SIG, DEC, AUT are off
 * Touch Cache Time: 0
 
-### Touch Policy
+{{% notice note %}}
+Firmware versions 1.6.1 and earlier only support RSA public keys with e = 65537.
+Firmware versions 2.0.0 and above support RSA3072 / RSA4096 key generation.
+{{% /notice %}}
+
+### 1.3 Touch Policy
 
 {{% notice note %}}
 Touch policy is only effective when using the USB interface.
@@ -44,17 +49,19 @@ Please use the "Settings" application in the CanoKey Console to modify the touch
 
 Please use GnuPG to modify the touch policy.
 
-### PIN Policy
+### 1.4 PIN Policy
 
 For DEC and AUT keys, after the PIN verification is successful, verification will not be required again until CanoKey is disconnected and reinserted.
 
 For SIG, if `forcesig` is on, a PIN is required for each signature; otherwise, a PIN is only required for the first signature after power-on.
 
-## Common Operations
+## 2. Common Operations
 
-## FAQs
+Please refer to the [GNU Privacy Handbook](https://gnupg.org/gph/en/manual.html).
 
-### GnuPG and PC/SC Conflict
+## 3. FAQs
+
+### 3.1 GnuPG and PC/SC Conflict
 
 GnuPG, by default, uses its own implementation ([scdaemon](https://www.gnupg.org/documentation/manuals/gnupg/Invoking-SCDAEMON.html)) to access smart cards including CanoKey, which conflicts with PC/SC. For details, see: <https://ludovicrousseau.blogspot.com/2019/06/gnupg-and-pcsc-conflicts.html>.
 
@@ -68,7 +75,7 @@ In Linux and macOS, this file is usually located at `~/.gnupg/scdaemon.conf`.
 
 In Windows, this issue is typically not encountered. If necessary, please modify the `scdaemon.conf` file under the GnuPG installation directory.
 
-### PC/SC Occupancy
+### 3.2 PC/SC Occupancy
 
 Since PC/SC access to smart cards may be exclusive (depending on the application access mode), even if configured correctly, GnuPG may still fail to access CanoKey. If you encounter this issue, simply re-plug CanoKey.
 

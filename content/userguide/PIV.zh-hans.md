@@ -4,162 +4,127 @@ date =  2020-07-11T22:33:15+08:00
 weight = 25
 +++
 
-个人身份认证 (PIV) 是由美利坚合众国政府标准定义为[FIPS 201](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.201-2.pdf)的工具。PIV 使用智能卡储存用于签名和加密的密钥。PIV 主要用于非 web 的场景。
+PIV（Personal Identity Verification，即个人身份认证）由美国联邦政府 [FIPS 201](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.201-2.pdf) 标准定义。PIV 可以储存用于签名和加密的密钥和证书，实现数字签名、文件加密等功能。
 
-## 基本信息
-### 可支持的算法
+## 1. 基本信息
+
+### 1.1 支持算法
 
 * RSA2048
 * NIST P-256
 * NIST P-384
 
-### 默认值
+从 CanoKey Canary 起，还支持以下扩展算法：
 
-* PIN: 默认为 123456
-* PUK: 默认为 12345678
-* 管理密钥：默认为 010203040506070801020304050607080102030405060708
+| 算法名称 | 算法ID |
+|:-------|:-------|
+| RSA3072| 05     |
+| RSA4096| 16     |
+| secp256k1|53    |
+| Ed25519| E0     |
+| X25519 | E1     |
+| SM2    | 54     |
 
-### 最大证书大小
+### 1.2 默认值
 
-* 固件版本 1.5 或更早：1000B
-* 固件版本 1.6.0 或更新：3kB
+* PIN：123456
+* PUK：12345678
+* 管理密钥：`010203040506070801020304050607080102030405060708`
 
-## 用户指导
+### 1.3 密钥槽
 
-以上用户指导由 `yubico-piv-tool` version 2.2.1, `ykman` version 4.0.7 以及 `opensc` version 0.22.0 under Linux 所编写。
+CanoKey 支持如下密钥：
 
-### 初始 PIV 在您的卡上
+* 9A：PIV Authentication
+* 9E：Card Authentication
+* 9C：Digital Signature
+* 9D：Key Management
 
-通常来讲，在您使用 Canokey 的 PIV 之前，您应该初始化 Cardholder Unique Identifier (CHUID) 以及 Cardholder Capability Container (CCC)
+从固件版本 2.0.0 开始，CanoKey 还支持如下密钥：
 
-```
-yubico-piv-tool -r canokeys -a set-ccc
-yubico-piv-tool -r canokeys -a set-chuid
-```
+* 82、83
 
-### 生成密钥和证书
+### 1.4 PIN 和触摸策略
 
-您可以使用 `yubico-piv-tool` 或 `ykman`。
+#### PIN 策略
+* 从不：从不验证 PIN
+* 总是：每次使用都验证 PIN
+* 一次：每个会话需要验证一次 PIN
 
-#### 使用 `yubico-piv-tool`
+#### 触摸策略
+* 从不：从不需要触摸
+* 总是：每次使用都需要触摸
+* 缓存：如果在过去 15 秒内已触摸过，则不需要触摸，否则需要触摸
 
-在本例中，我们使用 NIST P-384 算法生成密钥。私钥保存在 Canokey 中，公钥将写入 `public384.pem`。
-
-```
-$ yubico-piv-tool -r canokeys -s 9a -a generate -A ECCP384 -o public384.pem
-Successfully generated a new private key.
-```
-
-然后为该密钥生成证书。我们以 SSH 密钥为例，将证书导出为 cert.pem。
-
-```
-$ yubico-piv-tool -r canokeys -a verify-pin -a selfsign-certificate -s 9a -S "/CN=SSH key/" -i public384.pem -o certificate.pem
-Enter PIN: 
-Successfully verified PIN.
-Successfully generated a new self signed certificate.
-```
-
-然后我们就可以导入证书。
-
-```
-$ yubico-piv-tool -r canokeys -a import-certificate -s 9a -i certificate.pem
-Successfully imported a new certificate.
-```
-
-如果您想验证密钥是否存在，可以通过以下方式进行验证
-
-```
-$ yubico-piv-tool -r canokeys -a read-certificate  -s 9a
-```
-
-#### 使用 `ykman`
-
-可适用于`ykman` version 4.0 或以上版本。同样地，我们可以生成一个与 NIST P-384 algorithm 密钥对。此公钥将被写进 `public384.pem`.
-
-```
-$ ykman -r canokeys piv keys generate -a ECCP384 9a public384.pem
-```
-
-然后为该密钥生成证书。证书将保存在 Canokey 中，因此无需像使用 `yubico-piv-tool` 那样再次导入。以 SSH 密钥为例，证书有效期为 3 年（`-d 1095`）。
-
-```
-$ ykman -r canokeys piv certificates generate -d 1095 -s "CN=SSH Key" 9a public384.pem
-```
-
-要在 Canokey 上验证您的证书，您可以尝试
-
-```
-$ ykman -r canokeys piv info
-```
-
-### 使用 SSH 进行身份验证
-
-#### 使用 ssh-agent
-
-使用 pkcs11 提供程序运行 `ssh-agent`。这里我们使用 OpenSC。在下面的示例中，OpenSC 库位于 /usr/lib64/opensc-pkcs11.so。
-
-```
-$ eval $(ssh-agent -P /usr/lib64/opensc-pkcs11.so)
-Agent pid 61757
-```
-
-接着通过以下代码添加密钥
-
-```
-$ ssh-add -s /usr/lib64/opensc-pkcs11.so
-Enter passphrase for PKCS#11: 
-Card added: /usr/lib64/opensc-pkcs11.so
-```
-
-现在您可以检查您的 SSH 公钥。
-
-```
-$ ssh-add -L
-ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzODQAAABhBDydOf6U+9/hAknZnJckyFwoinXKVEjTZkVV7bKNDZs4XsaHUoQix3z3+LsVn9WsLKeAKtigv2GS/removed/Snip12345678901234567890123456789012/SnipSnip== PIV AUTH pubkey
-```
-
-用你喜欢的方式将打印好的密钥添加到远程机器上。现在，你可以像往常一样 ssh 到远程计算机。
-
-#### 不使用 ssh-agent
-
-如果没有 ssh-agent，每次 ssh 访问机器时都需要输入 PIV pin。
-
-检查 SSH 公钥
-
-```
-ssh-keygen -D /usr/lib64/opensc-pkcs11.so  -e
-```
-
-接着以您喜欢的方式将公共密钥添加进您的远程操控机器。现在通过提供PKCS#11库ssh到您的远程操控机器。
-
-```
-$ ssh -I /usr/lib64/opensc-pkcs11.so remote.lan
-Warning: Permanently added 'remote.lan' (ED25519) to the list of known hosts.
-Enter PIN for 'SSH key': 
-X11 forwarding request failed on channel 0
-Last login: Thu Jan 20 22:57:23 2022 from 192.168.1.246
-[user@remote ~]$ 
-```
-
-#### Windows 系统使用方法
-
-为了在 Windows 上使用 PIV SSH ,您可以尝试
-
-- [OpenSSH](https://github.com/PowerShell/Win32-OpenSSH) and [OpenSC](https://github.com/OpenSC/OpenSC), and the above instructions will work too. Or
-- [WinCryptSSHAgent](https://github.com/buptczq/WinCryptSSHAgent)
+#### 默认策略
 
 {{% notice note %}}
-在 Windows 上使用 PIV SSH, `NIST P-256` 和 `NIST P-384` 可能会不兼容。如果您依旧无法通过以上两种方法找到您的公钥，请使用`RSA2048`. 
+从固件版本 2.0.0 起，CanoKey 支持配置 PIV 的 PIN 和触摸策略。
 {{% /notice %}}
 
-### 导入`.pfx` 密钥&证书
+| 密钥槽 | 默认 PIN 策略 | 默认触摸策略 |
+|:------|:------------|:------------| 
+| 9E    | 不验证       | 从不       |
+| 其他   | 一次        | 从不       |
 
- `.pfx`文件 可能同时包含私钥和证书。在此次试例中，我们将导入 `credential.pfx` 到`9d`位置。
+### 1.5 数据尺寸限制
 
+* 证书：
+  * 固件版本 1.5 或更早：1000字节
+  * 固件版本 1.6 或更新：3000字节
+* Card Capability Container：287字节
+* Card Holder Unique Identifier：2916字节
+* Printed Information：245字节
+
+### 1.6 其他功能
+
+从固件版本 2.0.0 起，CanoKey 支持查看 PIV 的元数据。
+
+## 2. 常用操作
+
+{{% notice note %}}
+由于 PIV 通常为系统管理员签发，普通用户使用，因此请查阅文档理解下方内容后再操作。
+{{% /notice %}}
+
+### 2.1 工具
+
+建议使用 [yubico-piv-tool](https://developers.yubico.com/yubico-piv-tool/Releases/) 执行相关操作。
+
+### 2.2 分别导入密钥和证书
+
+如果密钥和证书在两个文件，则需要分别导入。
+
+导入私钥：
+```sh
+yubico-piv-tool -r canokey -a import-key -s 9a -i private-key.pem
 ```
-$ yubico-piv-tool -r canokeys -a verify-pin -s 9d -i "credential.pfx" -K PKCS12 -a import-key -a import-cert
+
+导入证书：
+```sh
+yubico-piv-tool -r canokey -a import-certificate -s 9a -i certificate.pem
 ```
 
-## 重置 PIV 小程序
+其中，`-s 9a`表示使用9A密钥槽，可以根据需要进行更改。
 
-如果您的 PIN 和 PUK 都被封锁无法使用的情况下，您可以使用`yubico-piv-tool -r canokeys -a reset` 已重置 PIV 小程序。在重置后，所有的 PIV 数据都已从您的 Canokey 抹除。以及您的 PIN, PUK 都已被恢复成默认状态。**在重置过后请记得再次初始化的 PIV**.
+### 2.3 导入PKCS#12文件
+
+若要导入同时包含私钥和证书的 PKCS#12 文件（.p12 或 .pfx），执行：
+```sh
+yubico-piv-tool -r canokey -a import-key -a import-certificate -K PKCS12 -s 9a -i certificate.p12
+```
+
+### 2.4 生成密钥并自签名
+
+生成一个新的私钥并对其自签名：
+```sh
+yubico-piv-tool -r canokey -a generate -s 9a -A RSA2048 -o public-key.pem
+yubico-piv-tool -r canokey -a verify-pin -a selfsign -s 9a -S "/CN=Test Certificate" -i public-key.pem -o certificate.pem
+yubico-piv-tool -r canokey -a import-certificate -s 9a -i certificate.pem
+```
+
+### 2.5 Windows 的额外操作
+
+由于 Windows 会根据 CHUID 来缓存证书信息，因此在 Windows 上每次导入证书后，需要更新CHUID：
+```sh
+yubico-piv-tool -r canokey -a set-chuid
+```
