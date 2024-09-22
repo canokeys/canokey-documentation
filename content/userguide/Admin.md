@@ -4,21 +4,34 @@ date =  2020-12-27T02:30:15+08:00
 weight = 10
 +++
 
-## Web Console
+## Main Functions
 
-You may use the Admin panel in web console to control some behavior of the key.
+The admin functions of CanoKey include important operations for managing and configuring the device. Currently, you can manage CanoKey through the following methods:
 
-<https://console.canokeys.org>
+* Web Console (Supports only Chrome and Chromium-based browsers): <https://console.canokeys.org>
+* [iOS App](https://apps.apple.com/app/canokey-console/id6476454147)
+* [Android App](https://play.google.com/store/apps/details?id=org.canokeys.console)
 
-## Default values
+CanoKey Pigeon only supports NFC access in the iOS App.
 
-* PIN: default 123456
-* LED: default ON
+The main configuration contents of the admin functions include:
+
+* LED Status: Enabled by default
+* NDEF (NFC Data Exchange Format): Enabled by default
+* WebUSB Login Page: Enabled by default
+* Reset
 
 ## Reset
 
-In the Settings app of the Web Console, click "Reset", the LED indicator of CanoKey will flash. When flashing, touch the key.
+### Reset Application Individually
 
-Repeat the above operation until it stops flashing.
+If you know the Admin PIN, you can reset each application individually through the console.
 
-**All data will be erased**
+**The data of the reset application will be erased**
+
+### Reset CanoKey
+
+If you do not remember the Admin PIN, you can reset CanoKey when the Admin PIN is completely locked out.
+In the settings application of the console, click "Reset", and the LED indicator of CanoKey will flash. When it flashes, please touch the key; repeat the above operation until it stops flashing.
+
+**All data will be erased**.

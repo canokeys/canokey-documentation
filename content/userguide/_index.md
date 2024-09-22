@@ -12,7 +12,7 @@ pre = "<b>1. </b>"
 
 Quick Start Guide
 
-## Default Passwords
+### Default Passwords
 
 During the use of CanoKey, users will encounter various PINs. This page lists all default passwords and descriptions, aiming to help users distinguish different PINs.
 
