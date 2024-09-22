@@ -7,7 +7,7 @@
 
 ## Product and Hardware Versions
 
-As of September 2022, the CanoKey project offers three products and two developer reference hardware. They use the same core library - [canokey-core](https://github.com/canokeys/canokey-core).
+As of September 2024, the CanoKey project offers three products and two developer reference hardware. They use the same core library - [canokey-core](https://github.com/canokeys/canokey-core).
 
 * **CanoKey Canary**: This is the upcoming version. It uses a USB Type C interface.
 * **CanoKey Pigeon**: This is the currently available version. It uses a USB Type A interface.
@@ -19,4 +19,4 @@ The retail versions use the HED CIU98320B chip as the MCU, which has passed EAL4
 
 ## Contribution Method
 
-We welcome contributions to this document. Please fork the [documentation](https://github.com/canokeys/canokey-documentation) and send a Pull Request.
+Contributions to this document are welcome. Please fork the [documentation](https://github.com/canokeys/canokey-documentation) and send a Pull Request.

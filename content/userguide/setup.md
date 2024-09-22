@@ -32,7 +32,7 @@ Linux users can perform the following configuration for easier use.
 
 ### udev
 
-The addition of `udev` rules is to use it without root users, please create `/etc/udev/rules.d/69-canokeys.rules` and fill in the following content.
+The aim of udev rules are to allow users without root privileges to use it. Please create `/etc/udev/rules.d/69-canokeys.rules` and fill in the following content.
 
 ```
 # GnuPG/pcsclite
