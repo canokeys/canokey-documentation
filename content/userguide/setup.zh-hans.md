@@ -26,6 +26,10 @@ CanoKey Pigeon 用户需编译安装最新版本的 [ccid 驱动程序](https://
 
 CanoKey Canary 用户无需配置即可使用。
 
+### pcsc-tools
+
+pcsc-tools 提供 `pcsc_scan` 命令以便快速排查 PC/SC 驱动问题。
+
 ## Linux
 
 Linux 用户可以执行如下配置，以更方便使用。
@@ -66,3 +70,7 @@ udevadm control --reload-rules && udevadm trigger
 ### CCID
 
 请使用 ccid 1.4.34 或更新的版本。
+
+### pcsc-tools
+
+pcsc-tools 提供 `pcsc_scan` 命令以便快速排查 PC/SC 驱动问题。

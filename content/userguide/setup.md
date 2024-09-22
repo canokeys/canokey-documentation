@@ -26,6 +26,10 @@ CanoKey Pigeon users need to compile and install the latest version of the [ccid
 
 CanoKey Canary users can use it without configuration.
 
+### pcsc-tools
+
+pcsc-tools provides the `pcsc_scan` command for quickly troubleshooting PC/SC driver issues.
+
 ## Linux
 
 Linux users can perform the following configuration for easier use.
@@ -66,3 +70,7 @@ udevadm control --reload-rules && udevadm trigger
 ### CCID
 
 Please use ccid version 1.4.34 or later.
+
+### pcsc-tools
+
+pcsc-tools provides the `pcsc_scan` command for quickly troubleshooting PC/SC driver issues.

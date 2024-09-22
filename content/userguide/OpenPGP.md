@@ -4,11 +4,11 @@ date =  2020-07-04T16:19:06+08:00
 weight = 20
 +++
 
-[OpenPGP](https://www.openpgp.org/) is a standard for signing and encrypting defined as [RFC4880](https://tools.ietf.org/html/rfc4880). It uses a private key to sign / encrypt messages and documents. One of the most commonly used tools for using OpenPGP is GNU Privacy Guard, which is short as GnuPG or GPG.
+[OpenPGP](https://www.openpgp.org/) is a signature and encryption standard specified by [RFC4880](https://tools.ietf.org/html/rfc4880). This standard achieves information and file signing/encryption through the use of private keys. One of the commonly used OpenPGP tools is GNU Privacy Guard, often abbreviated as GnuPG or GPG. In Windows, you can also use [Kleopatra](https://www.openpgp.org/software/kleopatra/).
 
-The private key can be stored in CanoKey, or you can use CanoKey to generate a OpenPGP key. The private key stored in CanoKey cannot be read out. This reduced the chance of leakage of the private key.
+## Basic Information
 
-## Supported algorithm
+### Supported Algorithms
 
 * RSA2048
 * RSA3072
@@ -19,112 +19,59 @@ The private key can be stored in CanoKey, or you can use CanoKey to generate a O
 * NIST P-384 (secp384r1)
 * secp256k1
 
-## Default values
+### Defaults
 
-* PIN: default 123456, min len 6, max len 64
-* Admin PIN: default 12345678, min len 8, max len 64
-* Reset Code: default not set, min len 8, max len 64
-* Signature PIN : forced // namely verify pin every signature
-* Touch Policy: OFF for SIG, DEC, AUT
+* PIN: Default is 123456, minimum length is 6, maximum length is 64
+* Admin PIN: Default is 12345678, minimum length is 8, maximum length is 64
+* Reset Code: Default is empty, minimum length is 8, maximum length is 64
+* Signature PIN: forced (PIN verification required for each signature)
+* Touch Policy: SIG, DEC, AUT are off
 * Touch Cache Time: 0
 
-## Touch Policy
+### Touch Policy
 
-There are three key slots for OpenPGP, namely Signature key (SIG), Encryption key (DEC) and Authentication key (AUT). You may turn ON or OFF touch policies for SIG, DEC, AUT in the admin applet in the web console or via the `gpg` command. The value of touch cache time is in between 0 and 255 seconds (0 means no cache).
+{{% notice note %}}
+Touch policy is only effective when using the USB interface.
+{{% /notice %}}
 
-### Firmware Version <= 1.4
+OpenPGP supports up to 3 keys: signature key (SIG), encryption key (DEC), and authentication key (AUT). Depending on the firmware version, you can set the touch policy for SIG, DEC, and AUT in the CanoKey Console or via the `gpg` command. The value of touch cache time ranges from 0 to 255 seconds (0 means no cache).
 
-Touch policy is configured through the admin applet. The technical details can be found in [https://docs.canokeys.org/development/protocols/admin/](https://docs.canokeys.org/development/protocols/admin/).
+#### Firmware Version <= 1.4
 
-### Firmware Version >= 1.5
+Please use the "Settings" application in the CanoKey Console to modify the touch policy.
 
-Touch policy is implemented using the User Interaction Flag (Part 4.4.3.6 of the OpenPGP specification). Use a recent GnuPG to configure it.
+#### Firmware Version >= 1.5
 
-**Touch policy is only applicable when using the USB interface.**
+Please use GnuPG to modify the touch policy.
 
-## PIN Policy
+### PIN Policy
 
-For DEC and AUT, after successfully verifying the PIN, it is always valid for the whole power-up.
+For DEC and AUT keys, after the PIN verification is successful, verification will not be required again until CanoKey is disconnected and reinserted.
 
-For SIG, if the flag `forcesig` is on, the PIN is requested for each signature; otherwise, PIN is only requested for the first signature after power-up.
+For SIG, if `forcesig` is on, a PIN is required for each signature; otherwise, a PIN is only required for the first signature after power-on.
 
-## Using GnuPG
+## Common Operations
 
-Please refer to the [GNU Privacy Handbook](https://gnupg.org/gph/en/manual.html) at the moment.
+## FAQs
 
-You may also refer to [https://github.com/drduh/YubiKey-Guide](https://github.com/drduh/YubiKey-Guide).
+### GnuPG and PC/SC Conflict
 
-### Cheatsheet
+GnuPG, by default, uses its own implementation ([scdaemon](https://www.gnupg.org/documentation/manuals/gnupg/Invoking-SCDAEMON.html)) to access smart cards including CanoKey, which conflicts with PC/SC. For details, see: <https://ludovicrousseau.blogspot.com/2019/06/gnupg-and-pcsc-conflicts.html>.
 
-```
-# card related
-# try below to make sure gpg works with canokey
-gpg --card-status
-# use this for editting card info and config
-# and/or generating keys
-gpg --edit-card
-# generate key
-gpg --expert --full-generate-key
-# get key infos
-gpg --list-keys --with-fingerprint --with-subkey-fingerprint [keyid or user id]
-gpg --list-keys --with-keygrip [keyid or user id]
-gpg --list-sigs [keyid or user id]
-# edit key
-# add uid/subkey in the interactive shell
-# keytocard or addcardkey
-gpg --edit-key <keyid or user id>
-# import/export key
-gpg --import file
-gpg --armor --output file --export <keyid or user id>
-gpg --armor --output file --export-secret-keys <keyid or user id>
-gpg --delete-keys <keyid or user id>
-# sign and verify
-gpg --armor --sign file
-gpg --sign-key --ask-cert-level <key id>
-gpg --armor --detach-sign file
-gpg --clear-sign file
-gpg --verify file.asc
-# encrypt and decrypt
-gpg --armor --encrypt --recipient <keyid or user id>
-gpg --decrypt file
-# misc
-gpgconf --kill gpg-agent
-gpg-connect-agent reloadagent /bye
-gpgconf --list-dirs agent-socket
-gpgconf --list-dirs agent-extra-socket
-gpgconf --list-dirs agent-ssh-socket
-```
-
-### Linux
-
-Note that we recommend using `ccid` and `pcsclite` for `gpg-agent`/`scdaemon` to access CanoKey, namely in `~/.gnupg/scdaemon.conf`
+To avoid conflicts, we recommend using the PC/SC interface to access CanoKey by adding the following to `scdaemon.conf`:
 
 ```
-pcsc-driver /usr/lib/libpcsclite.so
-card-timeout 5
 disable-ccid
 ```
 
-You should setup `ccid` as in [setup](https://docs.canokeys.org/userguide/setup/).
+In Linux and macOS, this file is usually located at `~/.gnupg/scdaemon.conf`.
 
-## Debug and Report
+In Windows, this issue is typically not encountered. If necessary, please modify the `scdaemon.conf` file under the GnuPG installation directory.
 
-### Linux
+### PC/SC Occupancy
 
-You may use `pcsc_scan` to check whether the smart card is detected by `pcscd`. Note that `pcscd` only uses the first smart card it detects, hence if you have other smart card readers in your box, you should remove or disable them first.
+Since PC/SC access to smart cards may be exclusive (depending on the application access mode), even if configured correctly, GnuPG may still fail to access CanoKey. If you encounter this issue, simply re-plug CanoKey.
 
-You can use `pcscd -a -d -f` to monitor the status of card reader and the communication. The log of it may be reported for troubleshooting.
+Programs commonly occupying PC/SC include:
 
-## Preemption problem
-
-If you get output below when use OpenPGP SmartCard function,
-
-```
-gpg: selecting card failed: No such device
-gpg: OpenPGP card not available: No such device
-```
-Check that you have browsers (including Electron and thunderbird) opened and you are using Windows or installed OpenSC in Linux.
-
-If you are sure, uninstall OpenSC (Linux only) or disable the PIV feature of Canokey (if you don't use PIV), and it will be fixed. Or if it's Firefox, you can enter "Firefox > Preferences > Privacy&Security > Certificates" and you can see "OpenSC Smartcard framework". You can click on it and click "unload"
-
-Another solution is to add `pcsc-shared` in `scdaemon.conf`. But it will lead to asking PIN every time when you use GnuPG 2.4+.
+* Firefox: You can unload "OpenSC Smartcard framework" in “Preferences > Privacy & Security > Certificates”.

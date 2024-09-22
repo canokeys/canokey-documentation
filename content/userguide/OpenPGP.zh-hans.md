@@ -4,11 +4,11 @@ date =  2020-07-04T16:19:06+08:00
 weight = 20
 +++
 
-[OpenPGP](https://www.openpgp.org/)  是 [RFC4880](https://tools.ietf.org/html/rfc4880) 规定的签名和加密标准。它使用私人密钥来签署/加密信息和文件。使用 OpenPGP 的最常用工具之一是 GNU Privacy Guard，简称 GnuPG 或 GPG。
+[OpenPGP](https://www.openpgp.org/) 是由 [RFC4880](https://tools.ietf.org/html/rfc4880) 规范的签名和加密标准。该标准通过使用私钥来实现信息和文件的签署/加密。常用的 OpenPGP 工具之一是 GNU Privacy Guard，通常简称为 GnuPG 或 GPG。在 Windows 中，还可以使用 [Kleopatra](https://www.openpgp.org/software/kleopatra/)。
 
-私钥可以存储在 CanoKey 中，也可以使用 CanoKey 生成 OpenPGP 密钥。存储在 CanoKey 中的私钥无法读出。这就减少了私钥泄漏的可能性。
+## 基本信息
 
-## 支持的算法
+### 支持算法
 
 * RSA2048
 * RSA3072
@@ -19,112 +19,59 @@ weight = 20
 * NIST P-384 (secp384r1)
 * secp256k1
 
-## 默认值
+### 默认值
 
-* PIN: 默认为 123456, 最小长度为 6, 最大长度为  64
-* Admin PIN: 默认为  12345678, 最小长度为  8, 最大长度为  64
-* Reset Code: 默认没有设置，最小长度为  8, 最大长度为  64
-* Signature PIN : forced // 即每次签名都要验证密码
-* 触摸策略：SIG, DEC, AUT 为 OFF
+* PIN: 默认为 123456, 最小长度为 6, 最大长度为 64
+* Admin PIN: 默认为 12345678, 最小长度为 8, 最大长度为 64
+* Reset Code: 默认为空，最小长度为 8, 最大长度为 64
+* Signature PIN : forced（每次签名都要验证 PIN）
+* 触摸策略：SIG, DEC, AUT 为关闭
 * 触摸缓存时间：0
 
-## 触摸策略
+### 触摸策略
 
-OpenPGP 有三个密钥插槽，即签名密钥 (SIG)、加密密钥 (DEC) 和验证密钥 (AUT)。您可以在网络控制台的管理小程序中或通过 `gpg` 命令打开或关闭 SIG、DEC 和 AUT 的触摸策略。触摸缓存时间的值在 0 至 255 秒之间（0 为无缓存）。
-### 固件版本  <= 1.4
+{{% notice note %}}
+触摸策略仅在使用 USB 接口时生效。
+{{% /notice %}}
 
-Touch policy is configured through the admin applet. The technical details can be found in [https://docs.canokeys.org/development/protocols/admin/](https://docs.canokeys.org/development/protocols/admin/).
+OpenPGP 最多支持 3 个密钥，即签名密钥 (SIG)、加密密钥 (DEC) 和验证密钥 (AUT)。根据固件版本不同，你可以在 CanoKey Console 中或通过 `gpg` 命令设置 SIG、DEC 和 AUT 的触摸策略。触摸缓存时间的值在 0 至 255 秒之间（0 为无缓存）。
 
-### 固件版本  >= 1.5
+#### 固件版本  <= 1.4
 
-触摸策略是通过 the User Interaction Flag（OpenPGP 规范第 4.4.3.6 部分）实现的。请使用最新的 GnuPG 进行配置。
+请通过 CanoKey Console 的“设置”应用修改触摸策略。
 
-**触摸策略仅适用于使用 USB 接口时。**
+#### 固件版本  >= 1.5
 
-## PIN 策略
+请通过 GnuPG 修改触摸策略。
 
-对于 DEC 和 AUT，在成功验证 PIN 码后，PIN 码在整个开机过程中始终有效。
+### PIN 策略
 
-对于 SIG，如果 flag `forcesig` 打开，则每次签名都要求输入 PIN；否则，只在开机后的第一次签名时要求输入 PIN。
+对于 DEC 和 AUT 密钥，PIN 验证成功后，将不再需要验证，直到断开并重新插入 CanoKey。
 
-## 使用 GnuPG
+对于 SIG，如果 `forcesig` 打开，则每次签名都要求输入 PIN；否则，只在上电后的第一次签名时要求输入 PIN。
 
-目前请参考 [GNU Privacy Handbook](https://gnupg.org/gph/en/manual.html)
+## 常用操作
 
-您也可以参考 [https://github.com/drduh/YubiKey-Guide](https://github.com/drduh/YubiKey-Guide).
+## 常见问题
 
-### 备忘录
+### GnuPG 和 PC/SC 冲突
 
-```
-# card related
-# try below to make sure gpg works with canokey
-gpg --card-status
-# use this for editting card info and config
-# and/or generating keys
-gpg --edit-card
-# generate key
-gpg --expert --full-generate-key
-# get key infos
-gpg --list-keys --with-fingerprint --with-subkey-fingerprint [keyid or user id]
-gpg --list-keys --with-keygrip [keyid or user id]
-gpg --list-sigs [keyid or user id]
-# edit key
-# add uid/subkey in the interactive shell
-# keytocard or addcardkey
-gpg --edit-key <keyid or user id>
-# import/export key
-gpg --import file
-gpg --armor --output file --export <keyid or user id>
-gpg --armor --output file --export-secret-keys <keyid or user id>
-gpg --delete-keys <keyid or user id>
-# sign and verify
-gpg --armor --sign file
-gpg --sign-key --ask-cert-level <key id>
-gpg --armor --detach-sign file
-gpg --clear-sign file
-gpg --verify file.asc
-# encrypt and decrypt
-gpg --armor --encrypt --recipient <keyid or user id>
-gpg --decrypt file
-# misc
-gpgconf --kill gpg-agent
-gpg-connect-agent reloadagent /bye
-gpgconf --list-dirs agent-socket
-gpgconf --list-dirs agent-extra-socket
-gpgconf --list-dirs agent-ssh-socket
-```
+GnuPG 默认使用自己的实现（[scdaemon](https://www.gnupg.org/documentation/manuals/gnupg/Invoking-SCDAEMON.html)）访问包括 CanoKey 在内的智能卡，这一实现与 PC/SC 冲突。详情请见：<https://ludovicrousseau.blogspot.com/2019/06/gnupg-and-pcsc-conflicts.html>。
 
-### Linux
-
-请注意，我们建议在 `gpg-agent/scdaemon` 中使用 `ccid` 和 `pcsclite` 来访问 CanoKey，即在 `~/.gnupg/scdaemon.conf` 中使用
+为了避免冲突，我们建议使用 PC/SC 接口访问 CanoKey，即在 `scdaemon.conf` 中增加：
 
 ```
-pcsc-driver /usr/lib/libpcsclite.so
-card-timeout 5
 disable-ccid
 ```
 
-您应该像[setup](https://docs.canokeys.org/userguide/setup/)中那样设置 `ccid`
+Linux 和 macOS 中，这一文件通常位于 `~/.gnupg/scdaemon.conf`。
 
-## Debug and Report
+Windows 中通常不会遇到这一问题，如有必要，请修改 GnuPG 安装目录下的 `scdaemon.conf` 文件。
 
-### Linux
+### PC/SC 占用
 
-You may use `pcsc_scan` to check whether the smart card is detected by `pcscd`. Note that `pcscd` only uses the first smart card it detects, hence if you have other smart card readers in your box, you should remove or disable them first.
+由于 PC/SC 对智能卡的访问可能是独占的（取决于应用程序访问模式），因此即使配置正确，GnuPG 仍然可能无法正确访问 CanoKey。如果遇到这一问题，只需重新插拔 CanoKey 即可。
 
-You can use `pcscd -a -d -f` to monitor the status of card reader and the communication. The log of it may be reported for troubleshooting.
+常见占用 PC/SC 的程序包括：
 
-## 抢占问题
-
-使用 OpenPGP 智能卡功能时，如果得到以下输出结果、
-
-```
-gpg: selecting card failed: No such device
-gpg: OpenPGP card not available: No such device
-```
-检查是否已打开浏览器（包括 Electron 和 thunderbird），是否使用 Windows 或在 Linux 中安装了 OpenSC。
-
-
-如果确定的话，卸载 OpenSC（仅限 Linux）或禁用 Canokey 的 PIV 功能（如果不使用 PIV），问题就会解决。如果是 Firefox，则可以进入 "Firefox > Preferences > Privacy&Security > Certificates"，然后可以看到 "OpenSC Smartcard framework"。你可以点击它，然后点击 "unload"。
-
-另一种解决方案是在 `scdaemon.conf` 中添加 `pcsc-shared`。但这将导致在使用 GnuPG 2.4+ 时每次都要询问 PIN 码。
+* FireFox：可以在 “Preferences > Privacy&Security > Certificates” 中卸载（unload）“OpenSC Smartcard framework”。
