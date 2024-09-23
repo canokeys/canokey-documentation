@@ -124,7 +124,7 @@ yubico-piv-tool -r canokey -a import-certificate -s 9a -i certificate.pem
 
 ### 2.5 Windows 的额外操作
 
-由于 Windows 会根据 CHUID 来缓存证书信息，因此在 Windows 上每次导入证书后，需要更新CHUID：
+由于 Windows 会根据 CHUID 来缓存卡内证书信息，因此在 Windows 上导入证书后，需要更新 CHUID：
 ```sh
 yubico-piv-tool -r canokey -a set-chuid
 ```

@@ -4,16 +4,19 @@ date =  2020-12-27T02:30:15+08:00
 weight = 30
 +++
 
+NDEF（NFC Data Exchange Format）是一种轻量级、可扩展的二进制数据格式，通常包含URL、文本等数据记录格式。
+
 ## 默认值
 
-* 模式：默认为读写模式，可在网络控制台中通过使用[网页小程序](https://console.canokeys.org/) 进行切换
-* 内容：默认 NDEF 信息，URL 为 "https://canokeys.org"
-* 最大 NDEF 报文长度：1022 字节
+* 模式：默认为读写模式，可在控制台中修改
+* 内容：默认为 URL，值为 "https://canokeys.org"
+* 最大长度：1022 字节
 
-## 使用
+## 使用方式
 
-您可以将其用作包含 URL、vCard 或任何 NDEF 支持的 NFC 标签。
-**请注意，由于 NDEF 没有加密功能，因此秘密不应存储在 NDEF 中。**
+1. 下载并安装 NFC Tools 应用程序。
+2. 打开 NFC Tools 应用程序，选择“读取”选项可以读取已经存在的 NDEF 标签内容。
+3. 选择“写入”选项可以将新的内容写入到 NDEF 标签中。请注意，NDEF 标签可重复写入。
+4. 将 iPhone 的顶部或 Android 设备的背面靠近 CanoKey，以完成信息的读写操作。
 
-
-您可以使用 [NFC 工具](https://play.google.com/store/apps/details?id=com.wakdev.wdnfc)来处理 NDEF 信息。
+请注意，NDEF 功能没有加密保护，因此传输的信息是明文存储和传输的。请根据自己的安全需求谨慎使用，避免存储和传输敏感信息。

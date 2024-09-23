@@ -124,7 +124,7 @@ yubico-piv-tool -r canokey -a import-certificate -s 9a -i certificate.pem
 
 ### 2.5 Additional Steps for Windows
 
-Since Windows caches certificate information based on CHUID, you need to update the CHUID after each certificate import on Windows:
+Since Windows caches certificate information based on CHUID, you need to update the CHUID after certificate import on Windows:
 ```sh
 yubico-piv-tool -r canokey -a set-chuid
 ```
