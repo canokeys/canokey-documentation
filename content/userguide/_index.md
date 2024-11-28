@@ -11,8 +11,7 @@ pre = "<b>1. </b>"
 ## Glossary
 
 - **FIDO**: Fast Identity Online, an open industry alliance dedicated to setting and promoting passwordless authentication standards.
-- **U2F**: Universal 2nd Factor, a standard protocol of the FIDO alliance that provides two-factor authentication through external media like USB devices, enhancing account security. This protocol has been replaced by CTAP 2.0 / 2.1. CanoKey supports U2F and CTAP 2.0 / 2.1 protocols.
-- **WebAuthn**: Web Authentication, an authentication protocol defined by W3C. Its device-side implementations include CTAP / U2F protocols.
+- **WebAuthn**: Web Authentication, an authentication protocol defined by W3C. Its device-side implementations include CTAP 2.1/2.0 protocols.
 - **Passkey**: A Passkey is an implementation of WebAuthn. CanoKey can store Passkey keys through the CTAP protocol.
 - **OpenPGP**: Open Pretty Good Privacy, an open standard protocol used for encrypting and signing data, widely used for securing communications such as emails. CanoKey supports all mandatory features in OpenPGP 3.4.1.
 - **GnuPG**: Gnu Privacy Guard, a free software tool implementing the OpenPGP standard, used for encrypting and signing data.

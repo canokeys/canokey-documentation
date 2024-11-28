@@ -6,8 +6,8 @@ weight = 15
 
 ## 1. 特性
 
-CanoKey 的 WebAuthn 功能遵循 [CTAP 2.1](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html)、
-[CTAP 2.0](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html) 以及 [U2F](https://fidoalliance.org/specs/fido-u2f-v1.0-ps-20141009/fido-u2f-hid-protocol-ps-20141009.html) 标准。
+CanoKey 的 WebAuthn 功能遵循 [CTAP 2.1](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html)以及
+[CTAP 2.0](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html)标准。
 
 支持的特性有：
 
@@ -22,6 +22,10 @@ CanoKey 的 WebAuthn 功能遵循 [CTAP 2.1](https://fidoalliance.org/specs/fido
 - Large Blob
 
 从固件版本 3.0.0 起，实验性支持 SM2 算法。
+
+{{% notice note %}}
+CanoKey （固件版本 3.0.0）不支持 U2F。
+{{% /notice %}}
 
 ## 2. 常见用途
 
@@ -125,6 +129,10 @@ ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub username@remote_host
 ### 2.3 PAM
 
 请参阅 [pam-u2f](https://developers.yubico.com/pam-u2f/)。
+
+{{% notice note %}}
+CanoKey （固件版本 3.0.0）不支持 U2F。
+{{% /notice %}}
 
 ### 2.4 HMAC-secret 扩展
 

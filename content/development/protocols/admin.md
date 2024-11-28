@@ -120,14 +120,14 @@ After a successful verification, you can use this command to change your PIN **d
 
 ### 5. Write FIDO Key
 
-The private key is shared by U2F and FIDO2, which is used to sign the attestation data in the registration phase. You can manually write it using this command. The private key should be a secp256r1 (NIST P-256) key.
+You can manually write it using this command. The private key should be a secp256r1 (NIST P-256) key.
 
 {{% notice note %}}
 When the private key is updated, the certification should be also updated accordingly.
 {{% /notice %}}
 
 {{% notice warning %}}
-Once you write a new private key, your old 2FA credentials (U2F/FIDO2) will be **invalid**.
+Once you write a new private key, your old 2FA credentials (FIDO2) will be **invalid**.
 {{% /notice %}}
 
 #### Request

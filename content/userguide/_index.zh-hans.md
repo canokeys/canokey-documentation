@@ -11,8 +11,7 @@ pre = "<b>一、</b>"
 ## 名词表
 
 - **FIDO**: Fast Identity Online，是一个开放的行业联盟，致力于制定和推广无密码身份验证标准。
-- **U2F**: Universal 2nd Factor，是 FIDO 联盟的一个标准协议，通过 USB 设备等外部介质提供双因素身份验证，增强账号安全性。该协议已被 CTAP 2.0 / 2.1 取代。CanoKey 支持 U2F 及 CTAP 2.0 / 2.1 协议。
-- **WebAuthn**: Web Authentication，是一种由 W3C 定义的身份认证协议，它的设备侧实现包括 CTAP / U2F 协议。
+- **WebAuthn**: Web Authentication，是一种由 W3C 定义的身份认证协议，它的设备侧实现包括 CTAP 2.1/2.0 协议。
 - **Passkey**: Passkey 是 WebAuthn 的一种实现。CanoKey 可以通过 CTAP 协议存储 Passkey 密钥。
 - **OpenPGP**: Open Pretty Good Privacy，是一种用于加密和签署数据的开放标准协议，广泛用于电子邮件等通信的安全保障。CanoKey 支持 OpenPGP 3.4.1 中的所有必须功能。
 - **GnuPG**: Gnu Privacy Guard，是一个实现 OpenPGP 标准的自由软件工具，用于加密和签署数据。
