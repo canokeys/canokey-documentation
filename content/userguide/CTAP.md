@@ -23,7 +23,7 @@ From firmware version 2.0.0, CanoKey also supports the following features:
 From firmware version 3.0.0, CanoKey experimentally supports the SM2 algorithm.
 
 {{% notice note %}}
-CanoKey with firmware version 3.0.0 does not support U2F.
+CanoKey with firmware version 3.0.0 does not support U2F, WebAuthn on iOS 17.4 and 18 via USB, or WebAuthn on macOS (including Safari, Firefox, and applications relying on Apple's CTAP stack).
 {{% /notice %}}
 
 ## 2. Primary Uses
@@ -128,10 +128,6 @@ ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub username@remote_host
 ### 2.3 PAM
 
 Please refer to [pam-u2f](https://developers.yubico.com/pam-u2f/).
-
-{{% notice note %}}
-CanoKey with firmware version 3.0.0 does not support U2F.
-{{% /notice %}}
 
 ### 2.4 HMAC-secret Extension
 

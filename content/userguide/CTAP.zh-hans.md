@@ -24,7 +24,7 @@ CanoKey 的 WebAuthn 功能遵循 [CTAP 2.1](https://fidoalliance.org/specs/fido
 从固件版本 3.0.0 起，实验性支持 SM2 算法。
 
 {{% notice note %}}
-CanoKey （固件版本 3.0.0）不支持 U2F。
+CanoKey 固件版本 3.0.0 不支持通过 USB 在 iOS 17.4 和 18 上使用 U2F 和 WebAuthn，也不支持在 macOS（包括 Safari、Firefox，以及依赖于 Apple CTAP 栈的应用程序）上使用 WebAuthn。
 {{% /notice %}}
 
 ## 2. 常见用途

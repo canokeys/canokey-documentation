@@ -25,6 +25,10 @@ Starting from CanoKey Canary, the following extended algorithms are also support
 | X25519         | E1           |
 | SM2            | 54           |
 
+{{% notice note %}}
+CanoKey firmware version 3.0.0 only supports signing 32-byte data using the Ed25519 algorithm and only supports using internally generated X25519 keys.
+{{% /notice %}}
+
 ### 1.2 Default Values
 
 * PIN: 123456

@@ -25,6 +25,10 @@ PIV（Personal Identity Verification，即个人身份认证）由美国联邦�
 | X25519 | E1     |
 | SM2    | 54     |
 
+{{% notice note %}}
+CanoKey 固件版本 3.0.0 仅支持使用 Ed25519 算法对 32 字节数据做签名，仅支持使用内部生成的 X25519 密钥。
+{{% /notice %}}
+
 ### 1.2 默认值
 
 * PIN：123456
