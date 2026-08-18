@@ -4,76 +4,79 @@ date =  2022-01-03T18:59:12+08:00
 weight = 35
 +++
 
-OATH is [an organization](https://openauthentication.org/) who provides open authentication standards: Time-based One Time Password (TOTP) and HMAC-based One Time Password (HOTP).
+OATH is [an organization](https://openauthentication.org/) that provides open authentication standards, including Time-based One-Time Password (TOTP) and HMAC-based One-Time Password (HOTP).
 
-HOTP and TOTP are both implemented in CanoKey Pigeon and Canokey epoxy editions. CanoKey can hold up to 100 OATH tokens.
+Canary, Pigeon, and Epoxy all implement HOTP and TOTP.
 
-## Firmware version 1.5 and newer (For example, CanoKey Pigeon).
+Firmware version 3.0.x and earlier can store up to 100 OATH credentials. From firmware version 3.1.1, there is no fixed credential limit. The actual number of credentials depends on available device storage, and no more credentials can be added when the storage is full.
 
-You should use `ykman` command version 4.0 or above to configure OATH and read OATH token.
-### Setting up
+Firmware version 3.1.1 and later also provide two HMAC-SHA1 challenge-response slots for applications such as KeePassXC. A host can send a challenge of up to 64 bytes using OATH/PCSC commands, and the device returns the raw 20-byte HMAC-SHA1 response. Keys are write-only and cannot be read through the configuration interface.
 
-If your authentication provider provides you with a URI `otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM`, you should configure it by
+## Configure and Use OATH
+
+Use CanoKey Console or `ckman` to manage OATH credentials.
+
+### CanoKey Console
+
+The web version of CanoKey Console requires Chrome or a Chromium-based browser.
+
+1. Open the [OATH page](https://console.canokeys.org/oath) in CanoKey Console and connect the CanoKey.
+2. Select `+` at the top of the page, then choose to scan a QR code with the camera, scan a QR code on the screen, or enter the credential manually.
+3. For manual entry, provide the issuer, account, secret, type, algorithm, number of digits, and other required fields, then confirm the addition.
+
+TOTP codes are displayed automatically. For a touch-protected TOTP credential, select the touch icon and then touch the CanoKey. To view an HOTP code, select the refresh icon beside the credential. The counter advances each time an HOTP code is calculated, so avoid calculating a code repeatedly.
+
+### ckman
+
+After installing [CanoKey Manager](https://github.com/canokeys/yubikey-manager), use `ckman` to manage OATH credentials. The following examples connect through a smart-card reader whose name contains `Canokeys`. If your system reports a different reader name, adjust the `--reader` argument accordingly.
+
+If the authentication service provides an `otpauth://` URI, import it directly:
+
+```sh
+ckman --reader "Canokeys" oath accounts uri "otpauth://totp/EXAMPLE.COM:username?secret=SOMESECRET&issuer=EXAMPLE.COM&algorithm=SHA1&digits=6&period=30"
 ```
-ykman -r "Canokeys" oath accounts uri "otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM"
+
+You can also provide each credential parameter separately. The following command adds a TOTP credential that uses SHA-1, six digits, and a 30-second period:
+
+```sh
+ckman --reader "Canokeys" oath accounts add \
+  --oath-type TOTP \
+  --algorithm SHA1 \
+  --digits 6 \
+  --period 30 \
+  --issuer "EXAMPLE.COM" \
+  "username" "SOMESECRET"
 ```
 
-Or if you are offered the fields separately, including the base32 encoded secret (in this example, it's `SOMESECRET`), the algorithm (in this example, it's SHA1), the length of digits, you can setup by
+List the OATH credentials stored on the device:
 
+```sh
+ckman --reader "Canokeys" oath accounts list
 ```
-ykman -r "Canokeys" oath accounts add -o TOTP -d 6 -a SHA1 -i 'username@EXAMPLE.COM' -P 30 USERNAME SOMESECRET
+
+Calculate codes for all TOTP credentials:
+
+```sh
+ckman --reader "Canokeys" oath accounts code
 ```
 
-You can use `ykman oath accounts add --help` to find all the available options.
+You can also provide a name to calculate or delete a specific credential:
 
-### Read OATH token
+```sh
+ckman --reader "Canokeys" oath accounts code "EXAMPLE.COM:username"
+ckman --reader "Canokeys" oath accounts delete "EXAMPLE.COM:username"
+```
 
-You can use [Yubico Authenticator](https://www.yubico.com/products/yubico-authenticator/) to read the OTP.
+Run `ckman oath accounts add --help` for HOTP, touch confirmation, and other available options.
 
-* Open Yubico Authenticator, click the button on the top left corner to fire up the side menu.
-* Click 'Settings' and then click 'Custom reader'
-* Select 'Enable custom reader' and fill in 'Canokey' in the 'Custom reader filter'
-* Click 'Save'
-* Click the '<' on the top to go back to Settings.
-* Unplug and plug in your CanoKey
-* Click the top left button to switch to 'Authenticator'
+## Optional: Enable HOTP Keyboard Output on Touch
 
-Then you'll see all your OATH tokens listed. 
+To make CanoKey type an HOTP code when touched, configure it in CanoKey Console:
 
-## Firmware version older than 1.5 (for example, CanoKey epoxy edition)
+1. Open the [Admin page](https://console.canokeys.org/admin) and connect the CanoKey.
+2. Select `AUTHENTICATE` and enter the Admin PIN.
+3. Enable `HOTP on touch` under `Config`.
+4. Open the [OATH page](https://console.canokeys.org/oath) and select the star icon beside the desired HOTP credential to make it the default.
+5. Disconnect and reinsert the CanoKey.
 
-You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium-based web browser to configure OATH.
-
-### Setup
-
-* Go to [OATH Applet](https://console.canokeys.org/oath) of the web console and connect your CanoKey.
-* Click 'CONNECT' on the top right corner
-* Select your CanoKey from the prompt dialog
-* Click the '+' sign on the down left of the box, then the 'Add credential to OATH Applet' section will show up on the web page.
-* Fill in the details, **or** copy the URI you got and click 'IMPORT OTPAUTH FROM CLIPBOARD'.
-* Click ADD
-* If there is no error, there will be a green box with 'Add OATH credential success' shown in the bottom left of your web page.
-
-### Read OATH TOTP token
-
-* Go to [OATH Applet](https://console.canokeys.org/oath) of the web console and connect your CanoKey.
-* Click 'CONNECT' on the top right corner
-* Select your CanoKey from the prompt dialog
-* Click the 'Calculate TOTP' button on the line of TOTP you want to calculate.
-* If there is no error, there will be a green box with 'TOTP code is xxxxxx' shown in the bottom left of your web page.
-
-
-## Optionally: Enable touch to input for HOTP
-
-If you are using HOTP and you want to make your CanoKey input your HOTP token every time you touch the key, you should 
-
-* Go to [Admin Applet](https://console.canokeys.org/admin) of the web console and connect your CanoKey.
-* If you haven't connected your CanoKey to the web console, click 'CONNECT' on the top right corner and select your CanoKey from the prompt dialog.
-* Click AUTHENTICATE and input your admin applet password to authenticate as admin user
-* Enable 'HOTP on touch' in the Config section, then you'll see a green box with 'HOTP on touch is on' shown in the bottom left of the web page.
-* Go to [OATH Applet](https://console.canokeys.org/oath) of the web console
-* Click the star icon '٭' on the line of HOTP you want to use. This will make the HOTP token default.
-* Click DISCONNECT on the top right corner
-* Unplug and plug in your CanoKey again.
-Now you can press the touch area to input your default HOTP token.
-
+After configuration, touch the CanoKey to type the code generated by the default HOTP credential.

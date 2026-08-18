@@ -14,7 +14,7 @@ PIV (Personal Identity Verification) is defined by the US federal government [FI
 * NIST P-256
 * NIST P-384
 
-Starting from CanoKey Canary, the following extended algorithms are also supported:
+Firmware version 3.0.0 and later also support the following extended algorithms:
 
 | Algorithm Name | Algorithm ID |
 |:---------------|:-------------|
@@ -25,8 +25,10 @@ Starting from CanoKey Canary, the following extended algorithms are also support
 | X25519         | E1           |
 | SM2            | 54           |
 
+Firmware version 3.1.1 adds NIST P-521 (`secp521r1`, algorithm ID `15`). Management software can read the extended algorithm IDs currently used by the device; use the values returned by the device.
+
 {{% notice note %}}
-CanoKey firmware version 3.0.0 only supports signing 32-byte data using the Ed25519 algorithm and only supports using internally generated X25519 keys.
+CanoKey firmware version 3.0.0 only supports signing 32-byte data using Ed25519 and only supports internally generated X25519 keys. Firmware version 3.0.2 and later are not affected by these limitations.
 {{% /notice %}}
 
 ### 1.2 Default Values
@@ -34,6 +36,8 @@ CanoKey firmware version 3.0.0 only supports signing 32-byte data using the Ed25
 * PIN: 123456
 * PUK: 12345678
 * Management Key: `010203040506070801020304050607080102030405060708`
+
+On firmware version 3.1.1 and later, the 24-byte management key uses AES-192 (algorithm ID `0A`).
 
 ### 1.3 Key Slots
 
@@ -44,9 +48,9 @@ CanoKey supports the following key slots:
 * 9C: Digital Signature
 * 9D: Key Management
 
-Starting from firmware version 2.0.0, CanoKey also supports the following key slots:
+Firmware version 2.0.0 adds Retired Key Management slots 82 and 83.
 
-* 82, 83
+Firmware version 3.1.1 and later support all Retired Key Management slots from 82 through 95. These slots and their certificate objects are created only when used and consume available device storage.
 
 ### 1.4 PIN and Touch Policies
 
@@ -69,7 +73,10 @@ Starting from firmware version 2.0.0, CanoKey supports configuring PIV PIN and t
 | Key Slot | Default PIN Policy | Default Touch Policy |
 |:---------|:-------------------|:---------------------|
 | 9E       | Never              | Never                |
-| Others   | Once               | Never                |
+| 9C       | Always             | Never                |
+| 9A, 9D, 82-95 | Once          | Never                |
+
+The default shown for slot 9C applies to firmware version 3.1.1 and later. Defaults may differ on older firmware; read the PIV metadata to determine the policies in use on a device.
 
 ### 1.5 Data Size Limitations
 
@@ -79,10 +86,23 @@ Starting from firmware version 2.0.0, CanoKey supports configuring PIV PIN and t
 * Card Capability Container: 287 bytes
 * Card Holder Unique Identifier: 2916 bytes
 * Printed Information: 245 bytes
+* Security Object: 245 bytes
+* Cardholder Fingerprints, Facial Image, and Iris Images: 512 bytes each
+* Key History: 32 bytes
+* Admin Data: 128 bytes
+
+Firmware version 3.1.1 and later support all Retired Key Management certificate objects. Reading Printed Information, fingerprints, facial images, or iris images requires PIN verification. Writing these objects requires management-key authentication. Optional objects consume storage only after data is written to them.
 
 ### 1.6 Other Features
 
 Starting from firmware version 2.0.0, CanoKey supports viewing PIV metadata.
+
+Firmware version 3.1.1 and later support:
+
+* Setting the PIN and PUK retry counters from 1 to 15. This operation requires both management-key and PIN authentication, and resets PIN and PUK to their default values.
+* PIV attestation for keys generated on the device (`INS F9`). Slot F9 must contain a provisioned P-256 attestation key, and its certificate must be stored in data object `5FFF01`. A PIV application reset preserves both items. Imported keys cannot be attested.
+* Moving keys between PIV slots or deleting keys after management-key authentication (`INS F6`). The corresponding certificates are not moved or deleted with the keys.
+* Reading and writing the PIN-protected PIV data objects described above.
 
 ## 2. Common Operations
 

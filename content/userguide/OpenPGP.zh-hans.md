@@ -17,11 +17,14 @@ weight = 20
 * Ed25519
 * NIST P-256 (secp256r1, prime256v1)
 * NIST P-384 (secp384r1)
+* NIST P-521（secp521r1）
 * secp256k1
+* SM2
 
 {{% notice note %}}
 固件版本 1.6.1 及之前仅支持 e = 65537 的 RSA 公钥。
 固件版本 2.0.0 起支持 RSA3072 / RSA4096 密钥生成。
+固件版本 3.1.1 起支持 NIST P-521 算法。
 {{% /notice %}}
 
 ### 1.2 默认值
@@ -32,6 +35,9 @@ weight = 20
 * Signature PIN : forced（每次签名都要验证 PIN）
 * 触摸策略：SIG, DEC, AUT 为关闭
 * 触摸缓存时间：0
+* PIN、Reset Code 和 Admin PIN 的重试次数：均为 3 次
+
+固件版本 3.1.1 起允许管理软件将 PIN、Reset Code 和 Admin PIN 的重试次数设置为 1 至 15。修改后，PIN 和 Admin PIN 将恢复为默认值；已有的 Reset Code 不会改变，但其重试计数会重置。
 
 ### 1.3 触摸策略
 

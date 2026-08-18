@@ -6,25 +6,33 @@ weight = 15
 
 ## 1. 特性
 
-CanoKey 的 WebAuthn 功能遵循 [CTAP 2.1](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html)以及
-[CTAP 2.0](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html)标准。
+CanoKey 的 WebAuthn 功能支持 CTAP 2.0。从固件版本 2.0.0 起支持 CTAP 2.1，从固件版本 3.1.1 起支持 CTAP 2.3。
 
 支持的特性有：
 
-- 高达 64 组 discoverable credentials (resident keys)
-- 支持 HMAC 扩展
+- Discoverable Credentials（Resident Keys）
+- HMAC 扩展
 - Ed25519 算法
 
-从固件版本 2.0.0 起，还支持如下特性：
+固件版本 2.0.0 起，新增：
 - Discoverable Credentials 管理
 - PIN Protocol 2
-- Credential Blob
+- `credProtect`、`credBlob` 和 `largeBlobKey` 扩展
 - Large Blob
 
-从固件版本 3.0.0 起，实验性支持 SM2 算法。
+固件版本 3.0.0 起，新增：
+- SM2 算法
+
+固件版本 3.1.1 起，新增：
+
+- 配置功能，包括 `alwaysUv`、最小 PIN 长度、强制更改 PIN 和长按重置设置
+- `minPinLength`、`thirdPartyPayment` 和创建凭据时的 HMAC-secret（`hmac-secret-mc`）扩展
+- ML-DSA-65（`alg = -49`）凭据；SM2 的默认算法 ID 由 `-48` 改为 `-54`
+- Discoverable Credential 的数量不再固定为 64 个，实际容量取决于设备的可用存储空间；设备还会报告当前剩余容量
+- 关闭 `alwaysUv` 后可使用 U2F
 
 {{% notice note %}}
-CanoKey 固件版本 3.0.0 不支持通过 USB 在 iOS 17.4 和 18 上使用 U2F 和 WebAuthn，也不支持在 macOS（包括 Safari、Firefox，以及依赖于 Apple CTAP 栈的应用程序）上使用 WebAuthn。
+固件版本 3.0.0：不支持 U2F，不支持通过 USB 在 iOS 17.4 和 18 上使用 WebAuthn，也不支持在 macOS（包括 Safari、Firefox，以及依赖 Apple CTAP 栈的应用程序）上使用 WebAuthn。固件 3.0.2 及更高版本不受这些限制。
 {{% /notice %}}
 
 ## 2. 常见用途
@@ -131,7 +139,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub username@remote_host
 请参阅 [pam-u2f](https://developers.yubico.com/pam-u2f/)。
 
 {{% notice note %}}
-CanoKey （固件版本 3.0.0）不支持 U2F。
+固件版本 3.0.0 不支持 U2F；固件 3.0.2 及更高版本支持 U2F。使用固件 3.1.1 及更高版本时，需要关闭 `alwaysUv`。
 {{% /notice %}}
 
 ### 2.4 HMAC-secret 扩展

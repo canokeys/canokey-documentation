@@ -8,7 +8,7 @@ weight = 20
 
 ## 1. Basic Information
 
-### 2. Supported Algorithms
+### 1.1 Supported Algorithms
 
 * RSA2048
 * RSA3072
@@ -17,7 +17,15 @@ weight = 20
 * Ed25519
 * NIST P-256 (secp256r1, prime256v1)
 * NIST P-384 (secp384r1)
+* NIST P-521 (secp521r1)
 * secp256k1
+* SM2
+
+{{% notice note %}}
+Firmware versions 1.6.1 and earlier only support RSA public keys with e = 65537.
+Firmware version 2.0.0 and later support RSA3072 / RSA4096 key generation.
+Firmware version 3.1.1 and later support NIST P-521.
+{{% /notice %}}
 
 ### 1.2 Defaults
 
@@ -27,11 +35,9 @@ weight = 20
 * Signature PIN: forced (PIN verification required for each signature)
 * Touch Policy: SIG, DEC, AUT are off
 * Touch Cache Time: 0
+* Retry counters for PIN, Reset Code, and Admin PIN: 3 each
 
-{{% notice note %}}
-Firmware versions 1.6.1 and earlier only support RSA public keys with e = 65537.
-Firmware versions 2.0.0 and above support RSA3072 / RSA4096 key generation.
-{{% /notice %}}
+Firmware version 3.1.1 and later allow management software to set the retry counters for PIN, Reset Code, and Admin PIN from 1 to 15. Changing these values resets PIN and Admin PIN to their defaults. An existing Reset Code is not changed, but its retry counter is reset.
 
 ### 1.3 Touch Policy
 
@@ -41,11 +47,11 @@ Touch policy is only effective when using the USB interface.
 
 OpenPGP supports up to 3 keys: signature key (SIG), encryption key (DEC), and authentication key (AUT). Depending on the firmware version, you can set the touch policy for SIG, DEC, and AUT in the CanoKey Console or via the `gpg` command. The value of touch cache time ranges from 0 to 255 seconds (0 means no cache).
 
-#### Firmware Version <= 1.4
+#### Firmware Version < 1.4
 
 Please use the "Settings" application in the CanoKey Console to modify the touch policy.
 
-#### Firmware Version >= 1.5
+#### Firmware Version >= 1.5.0
 
 Please use GnuPG to modify the touch policy.
 

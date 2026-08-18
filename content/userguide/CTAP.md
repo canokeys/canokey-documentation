@@ -6,24 +6,35 @@ weight = 15
 
 ## 1. Features
 
-CanoKey's WebAuthn functionality adheres to the [CTAP 2.1](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html) and [CTAP 2.0](https://fidoalliance.org/specs/fido-v2.0-ps-20190130/fido-client-to-authenticator-protocol-v2.0-ps-20190130.html).
+CanoKey's WebAuthn functionality supports CTAP 2.0. CTAP 2.1 is supported from firmware version 2.0.0, and CTAP 2.3 is supported from firmware version 3.1.1.
 
 Supported features include:
 
-- Up to 64 sets of discoverable credentials (resident keys)
-- HMAC extension support
+- Discoverable Credentials (Resident Keys)
+- HMAC extensions
 - Ed25519 algorithm
 
-From firmware version 2.0.0, CanoKey also supports the following features:
+Firmware version 2.0.0 adds:
+
 - Discoverable Credentials management
 - PIN Protocol 2
-- Credential Blob
+- `credProtect`, `credBlob`, and `largeBlobKey` extensions
 - Large Blob
 
-From firmware version 3.0.0, CanoKey experimentally supports the SM2 algorithm.
+Firmware version 3.0.0 adds:
+
+- SM2 algorithm
+
+Firmware version 3.1.1 adds:
+
+- Configuration options including `alwaysUv`, minimum PIN length, forced PIN change, and long-press reset settings
+- `minPinLength`, `thirdPartyPayment`, and HMAC-secret during credential creation (`hmac-secret-mc`) extensions
+- ML-DSA-65 (`alg = -49`) credentials; the default algorithm ID for SM2 changes from `-48` to `-54`
+- No fixed limit of 64 Discoverable Credentials: actual capacity depends on available device storage, and the device also reports the remaining capacity
+- U2F support when `alwaysUv` is disabled
 
 {{% notice note %}}
-CanoKey with firmware version 3.0.0 does not support U2F, WebAuthn on iOS 17.4 and 18 via USB, or WebAuthn on macOS (including Safari, Firefox, and applications relying on Apple's CTAP stack).
+Firmware version 3.0.0 does not support U2F, WebAuthn over USB on iOS 17.4 and 18, or WebAuthn on macOS, including Safari, Firefox, and applications that rely on Apple's CTAP stack. Firmware version 3.0.2 and later are not affected by these limitations.
 {{% /notice %}}
 
 ## 2. Primary Uses
@@ -129,10 +140,14 @@ ssh-copy-id -i ~/.ssh/id_ed25519_sk.pub username@remote_host
 
 Please refer to [pam-u2f](https://developers.yubico.com/pam-u2f/).
 
+{{% notice note %}}
+Firmware version 3.0.0 does not support U2F. Firmware version 3.0.2 and later support U2F. On firmware version 3.1.1 and later, `alwaysUv` must be disabled.
+{{% /notice %}}
+
 ### 2.4 HMAC-secret Extension
 
 - [systemd-cryptenroll](http://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html), used for LUKS full-disk encryption
 
 {{% notice note %}}
 Due to a [bug](https://github.com/Yubico/libfido2/issues/322#issuecomment-817174671) in the CTAP implementation, CanoKey firmware version ≤ 1.3 is incompatible with libfido2 1.7.0, and thus cannot be used with `systemd-cryptenroll`. Affected users should use libfido2 1.6.0.
-{{% /notice %}}.
+{{% /notice %}}

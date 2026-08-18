@@ -44,15 +44,11 @@ Note that the following features are not supported:
 
 #### PIV
 
-CanoKey implements most of the mandatory features of the [specification](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf).
+CanoKey implements the mandatory features of the [specification](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf), including biometric and Security Object data objects. It also provides configurable algorithm IDs, PIV attestation, complete Retired Key Management slots, and other extensions.
 
-The following features are not supported:
+See the [PIV applet protocol documentation](piv/) for the command list, data objects, supported algorithms, and firmware-specific extensions.
 
-- Data objects:
-  - Cardholder Fingerprints
-  - Security Object
-  - Cardholder Facial Image
-- Secure Messaging
+Secure Messaging is not supported.
 
 #### OATH
 

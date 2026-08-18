@@ -6,74 +6,77 @@ weight = 35
 
 OATH 是一个提供开放认证标准的[组织](https://openauthentication.org/)：基于时间的一次性密码 (TOTP) 和基于 HMAC 的一次性密码 (HOTP)。
 
-HOTP 和 TOTP 都在 CanoKey Pigeon 和 CanoKey epoxy 版本中实现。CanoKey 最多可容纳 100 个 OATH 令牌。
+Canary、Pigeon 和 Epoxy 均实现了 HOTP 和 TOTP。
 
-## 固件版本 1.5 及更新版本（例如 CanoKey Pigeon）
+3.0.x 及更早版本的固件最多可保存 100 个 OATH 凭据。固件版本 3.1.1 起不再固定凭据数量上限，实际可保存的数量取决于设备的可用存储空间；空间不足时将无法继续添加凭据。
 
-应使用 4.0 或更高版本的 `ykman` 命令配置 OATH 和读取 OATH 令牌。
-### 设置
+固件 3.1.1 及更高版本还提供两个用于 HMAC-SHA1 质询-响应（challenge-response）的槽位，可供 KeePassXC 等应用使用。主机可通过 OATH/PCSC 命令发送最长 64 字节的质询，设备将返回原始的 20 字节 HMAC-SHA1 响应。密钥只能写入，无法通过配置接口读出。
 
-如果身份验证提供商为您提供了 URI `otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM`，您应该通过以下方式进行配置
+## 配置和使用 OATH
+
+可以使用 CanoKey Console 或 `ckman` 管理 OATH 凭据。
+
+### 使用 CanoKey Console
+
+CanoKey Console 的网页版需要 Chrome 或 Chromium 内核浏览器。
+
+1. 打开 CanoKey Console 的 [OATH 页面](https://console.canokeys.org/oath)，连接 CanoKey。
+2. 点击页面顶部的 `+`，选择扫码添加、扫描屏幕上的二维码或手动添加。
+3. 手动添加时，填写签发者、账户、密钥、类型、算法和位数等信息，然后确认添加。
+
+TOTP 会自动显示；需要触摸确认的 TOTP，点击触摸图标后再触摸 CanoKey。查看 HOTP 时，点击对应凭据旁的刷新图标。HOTP 每次计算后计数器都会递增，请勿重复计算。
+
+### 使用 ckman
+
+安装 [CanoKey Manager](https://github.com/canokeys/yubikey-manager) 后，可以使用 `ckman` 管理 OATH 凭据。以下示例通过名称中包含 `Canokeys` 的智能卡读卡器连接设备；如果系统显示的读卡器名称不同，请相应修改 `--reader` 参数。
+
+如果身份验证服务提供了 `otpauth://` URI，可以直接导入：
+
+```sh
+ckman --reader "Canokeys" oath accounts uri "otpauth://totp/EXAMPLE.COM:username?secret=SOMESECRET&issuer=EXAMPLE.COM&algorithm=SHA1&digits=6&period=30"
 ```
-ykman -r "Canokeys" oath accounts uri "otpauth://totp/username@EXAMPLE.COM:12345678-90ab-cdef-1234-567890abcdef?digits=6&secret=SOMESECRET&period=30&algorithm=SHA1&issuer=username%40EXAMPLE.COM"
+
+也可以分别指定凭据参数。下面的命令添加一个使用 SHA-1、6 位数字和 30 秒周期的 TOTP 凭据：
+
+```sh
+ckman --reader "Canokeys" oath accounts add \
+  --oath-type TOTP \
+  --algorithm SHA1 \
+  --digits 6 \
+  --period 30 \
+  --issuer "EXAMPLE.COM" \
+  "username" "SOMESECRET"
 ```
 
-或者，如果分别提供字段，包括 base32 编码的密文（在本例中为 `SOMESECRET`）、算法（在本例中为 SHA1）、数字长度，则可以通过以下方式设置
+列出设备中的 OATH 凭据：
 
+```sh
+ckman --reader "Canokeys" oath accounts list
 ```
-ykman -r "Canokeys" oath accounts add -o TOTP -d 6 -a SHA1 -i 'username@EXAMPLE.COM' -P 30 USERNAME SOMESECRET
+
+计算所有 TOTP 凭据的动态密码：
+
+```sh
+ckman --reader "Canokeys" oath accounts code
 ```
 
-您可以使用 `ykman oath accounts add --help` 查找所有可用选项。
+也可以提供名称以计算指定凭据，或删除指定凭据：
 
-### 读取 OATH 令牌
+```sh
+ckman --reader "Canokeys" oath accounts code "EXAMPLE.COM:username"
+ckman --reader "Canokeys" oath accounts delete "EXAMPLE.COM:username"
+```
 
-您可以使用 [Yubico Authenticator](https://www.yubico.com/products/yubico-authenticator/) 读取 OTP。
-
-* 打开 Yubico Authenticator，点击左上角的按钮启动侧边菜单。
-* 点击 'Settings'，然后点击 'Custom reader'
-* 选择 "Enable custom reader' and fill in 'Canokey"，并在 "自定义阅读器过滤器 "Custom reader filter"。
-* 点击 'Save'
-* 点击顶部的"<"返回设置。
-* 拔下并插入 CanoKey
-* 单击左上角按钮切换到 'Authenticator'
-
-然后您就会看到所有 OATH 令牌的列表。
-
-## Firmware version older than 1.5 (for example, CanoKey epoxy edition)
-
-You should use [CanoKey Web Console](https://console.canokeys.org) on a Chromium-based web browser to configure OATH.
-
-### Setup
-
-* Go to [OATH Applet](https://console.canokeys.org/oath) of the web console and connect your CanoKey.
-* Click 'CONNECT' on the top right corner
-* Select your CanoKey from the prompt dialog
-* Click the '+' sign on the down left of the box, then the 'Add credential to OATH Applet' section will show up on the web page.
-* Fill in the details, **or** copy the URI you got and click 'IMPORT OTPAUTH FROM CLIPBOARD'.
-* Click ADD
-* If there is no error, there will be a green box with 'Add OATH credential success' shown in the bottom left of your web page.
-
-### Read OATH TOTP token
-
-* Go to [OATH Applet](https://console.canokeys.org/oath) of the web console and connect your CanoKey.
-* Click 'CONNECT' on the top right corner
-* Select your CanoKey from the prompt dialog
-* Click the 'Calculate TOTP' button on the line of TOTP you want to calculate.
-* If there is no error, there will be a green box with 'TOTP code is xxxxxx' shown in the bottom left of your web page.
-
+使用 `ckman oath accounts add --help` 可以查看 HOTP、触摸确认和其他可用参数。
 
 ## 可选：为 HOTP 启用触摸输入
 
-如果您正在使用 HOTP，并希望让 CanoKey 在您每次触摸按键时都能键入 HOTP 令牌，您应该  
+如果希望 CanoKey 在触摸时输入 HOTP，请在 CanoKey Console 中完成以下设置：
 
-* 进入网络控制台的[Admin Applet](https://console.canokeys.org/admin)，连接 CanoKey。
-* 如果尚未将 CanoKey 与网络控制台连接，请单击右上角的 "CONNECT"，然后在提示对话框中选择您的 CanoKey。
-* 单击 "AUTHENTICATE"并输入管理员小程序密码，以管理员用户身份进行认证
-* 在 " Config"部分启用 "HOTP on touch"，然后就会在网页左下方看到一个绿色方框，上面显示 "HOTP on touch is on"。
-* 进入网络控制台的[OATH Applet](https://console.canokeys.org/oath)
-* 点击要使用的 HOTP 行上的星形图标"٭"。这将使该 HOTP 标记成为默认值
-* 点击右上角的 DISCONNECT
-* 拔下并重新插入 CanoKey。
-现在您可以按触摸区域键入默认的 HOTP 令牌。
+1. 打开 [Admin 页面](https://console.canokeys.org/admin)并连接 CanoKey。
+2. 点击 `AUTHENTICATE`，输入 Admin PIN 完成认证。
+3. 在 `Config` 中启用 `HOTP on touch`。
+4. 打开 [OATH 页面](https://console.canokeys.org/oath)，点击目标 HOTP 凭据旁的星形图标，将其设为默认凭据。
+5. 断开连接，然后重新插入 CanoKey。
 
+设置完成后，触摸 CanoKey 即可输入默认 HOTP 凭据生成的动态密码。
