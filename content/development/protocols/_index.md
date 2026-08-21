@@ -25,6 +25,8 @@ Supported features:
 - The HMAC extension
 - Ed25519
 
+See the [FIDO2 / CTAP2 protocol documentation](ctap2/) for the command list, GetInfo contents, supported algorithms and extensions, and firmware-specific behavior.
+
 #### OpenPGP Smart Card 3.4
 
 CanoKey implements all the mandatory features of the [specification](https://gnupg.org/ftp/specs/OpenPGP-smart-card-application-3.4.pdf). Besides, the following optional features are also implemented:
@@ -41,6 +43,8 @@ Note that the following features are not supported:
 - Secure Messaging
 - AES
 - Command: MANAGE SECURITY ENVIRONMENT
+
+See the [OpenPGP applet protocol documentation](openpgp/) for the command list, data objects, supported algorithms, and firmware-specific behavior.
 
 #### PIV
 
@@ -63,6 +67,8 @@ Please refer to the [Admin Applet documentation](admin/).
 [NFC Forum Type-4 Tag](http://apps4android.org/nfc-specifications/NFCForum-TS-Type-4-Tag_2.0.pdf).
 
 The maximum capacity of NDEF message is 1022-bytes.
+
+See the [NDEF applet protocol documentation](ndef/) for the file layout, commands, and the read-only flag.
 
 #### WebUSB
 

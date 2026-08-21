@@ -74,17 +74,19 @@ The standard algorithm IDs are fixed. IDs for the extended algorithms are config
 | secp256k1 | `53` | 3.0.0+ |
 | SM2 | `54` | 3.0.0+ |
 | NIST P-521 | `15` | 3.1.1+ |
+| ML-DSA-65 | `E2` | 3.1.1+ |
+| ML-KEM-768 | `E3` | 3.1.1+ |
 
 Firmware version 3.0.0 accepts only 32-byte input for Ed25519 signing and only internally generated X25519 keys. Firmware version 3.0.2 and later remove these restrictions.
 
 ### 2.2 Algorithm Extension Command
 
-The Algorithm Extension command reads or writes the eight-byte extended-algorithm configuration record.
+The Algorithm Extension command reads or writes the ten-byte extended-algorithm configuration record.
 
 | Operation | APDU header | Authentication | Data |
 |:----------|:------------|:---------------|:-----|
 | Read | `00 EE 01 00` | None | Empty |
-| Write | `00 EE 02 00` | Management key | Eight-byte record |
+| Write | `00 EE 02 00` | Management key | Ten-byte record |
 
 The record fields are ordered as follows:
 
@@ -98,6 +100,8 @@ The record fields are ordered as follows:
 | 5 | secp256k1 ID | `53` |
 | 6 | NIST P-521 ID | `15` |
 | 7 | SM2 ID | `54` |
+| 8 | ML-DSA-65 ID | `E2` |
+| 9 | ML-KEM-768 ID | `E3` |
 
 The enable field must be `00` or `01`. Algorithm IDs can use any byte value and may overlap. A successful write takes effect immediately.
 
@@ -126,25 +130,25 @@ Get Data and Put Data use the standard `5C` tag list and `53` data container def
 |:---:|:------------|---------:|:------------|
 | `7E` | Discovery Object | Synthesized | Public, read-only |
 | `7F61` | Biometric Information Templates Group Template | Synthesized | Public, read-only |
-| `5FC101` | Card Authentication Certificate | 3000 bytes | Public |
+| `5FC101` | Card Authentication Certificate | 6144 bytes | Public |
 | `5FC102` | Cardholder Unique Identifier | 2916 bytes | Public |
 | `5FC103` | Cardholder Fingerprints | 512 bytes | PIN |
-| `5FC105` | PIV Authentication Certificate | 3000 bytes | Public |
+| `5FC105` | PIV Authentication Certificate | 6144 bytes | Public |
 | `5FC106` | Security Object | 245 bytes | Public |
 | `5FC107` | Card Capability Container | 287 bytes | Public |
 | `5FC108` | Cardholder Facial Image | 512 bytes | PIN |
 | `5FC109` | Printed Information | 245 bytes | PIN |
-| `5FC10A` | Digital Signature Certificate | 3000 bytes | Public |
-| `5FC10B` | Key Management Certificate | 3000 bytes | Public |
+| `5FC10A` | Digital Signature Certificate | 6144 bytes | Public |
+| `5FC10B` | Key Management Certificate | 6144 bytes | Public |
 | `5FC10C` | Key History Object | 32 bytes | Public |
-| `5FC10D`-`5FC120` | Retired Key Management Certificates | 3000 bytes each | Public |
+| `5FC10D`-`5FC120` | Retired Key Management Certificates | 6144 bytes each | Public |
 | `5FC121` | Cardholder Iris Images | 512 bytes | PIN |
 | `5FFF00` | Pairing Code Reference Data / Admin Data | 128 bytes | Public |
-| `5FFF01` | Attestation Certificate | 3000 bytes | Public |
+| `5FFF01` | Attestation Certificate | 6144 bytes | Public |
 
 The `5FFF01` attestation certificate object is preserved by a PIV reset. Other writable data objects are cleared.
 
-Certificate capacities are 3000 bytes on firmware version 1.6 and later and 1000 bytes on firmware version 1.5 and earlier.
+Certificate capacities are 6144 bytes on firmware version 3.1.1 and later, 3000 bytes on firmware versions 1.6 to 3.0.x, and 1000 bytes on firmware version 1.5 and earlier.
 
 ## 5. Firmware 3.1.1 Extensions
 
