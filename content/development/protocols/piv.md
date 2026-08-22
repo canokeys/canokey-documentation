@@ -209,6 +209,25 @@ Only keys generated on the device can be attested. Imported keys are rejected. T
 
 Use `00 F7 00 <reference>` with no data. The reference can be PIN (`80`), PUK (`81`), management key (`9B`), or a supported asymmetric-key slot. The response follows the Yubico PIV metadata TLV format and reports values such as algorithm, policies, origin, public key, default status, and retry counters where applicable.
 
+A compact metadata directory is available with `00 F7 01 00` and no data. It lists, in a single response, which key slots hold a key or a certificate, without requiring authentication. The response contains two TLVs:
+
+```text
+01 01 <version>  02 <length>  <entries>
+```
+
+Tag `01` carries the one-byte directory version (currently `01`). Tag `02` carries the entry payload, with one six-byte entry per slot:
+
+| Byte | Content |
+|:----:|:--------|
+| 0 | Slot ID |
+| 1 | Flags: bit `01` set when a key is present, bit `02` set when a certificate is present |
+| 2 | Algorithm ID, or `00` when no key is present |
+| 3 | Origin (`01` generated on device, `02` imported), or `00` when no key is present |
+| 4 | PIN policy, or `00` when no key is present |
+| 5 | Touch policy, or `00` when no key is present |
+
+Slots are enumerated in the order `9A`, `9C`, `9D`, `9E`, then `82` through `95`; slots with neither a key nor a certificate are omitted, so the payload holds at most 24 entries.
+
 ### 6.2 Get Serial and Version
 
 - `00 F8 00 00` returns the four-byte device serial number.
