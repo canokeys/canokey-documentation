@@ -25,6 +25,7 @@ CLA must be `00h`; the only exception is the chained blocks of Write FIDO Cert, 
 #### Instructions
 
 Instructions marked as Require PIN require a successful Verify PIN command to be performed before they are available; otherwise they return `6982`. Instruction codes not listed here return `6D00`.
+Some instructions or features require a specific firmware version or above; see the version note in each section.
 
 | Name                   | Code | Require PIN                |
 | ---------------------- | ---- | -------------------------- |
@@ -194,14 +195,14 @@ The maximum length of the certification is 1152 bytes. Since it may not fit in a
 
 Executing these commands will reset the corresponding applets.
 
-| Instruction Code | Applet  |
-| ---------------- | ------- |
-| 03h              | OpenPGP |
-| 04h              | PIV     |
-| 05h              | OATH    |
-| 09h              | CTAP    |
-| 07h              | NDEF    |
-| 13h              | Pass    |
+| Instruction Code | Applet  | Firmware version |
+| ---------------- | ------- | ---------------- |
+| 03h              | OpenPGP | -                |
+| 04h              | PIV     | -                |
+| 05h              | OATH    | -                |
+| 09h              | CTAP    | 3.0.0+           |
+| 07h              | NDEF    | -                |
+| 13h              | Pass    | 3.0.0+           |
 
 Resetting CTAP invalidates all FIDO2 credentials. NDEF and Pass are only available when the corresponding applet is compiled in; otherwise the command returns `6D00`.
 
@@ -241,7 +242,7 @@ Set if NDEF is read-only.
 
 ### 9. Read / Write CTAP SM2 Config
 
-Read or write the SM2 configuration of the CTAP applet. The configuration is 8 bytes: a 32-bit `curve_id` followed by a 32-bit `algo_id` (COSE identifiers). When writing, `algo_id` must not conflict with the algorithm identifiers of ES256 / EdDSA / ML-DSA-65, otherwise `6A80` is returned.
+Read or write the SM2 configuration of the CTAP applet (requires firmware 3.0.0 or above). The configuration is 8 bytes: a 32-bit `curve_id` followed by a 32-bit `algo_id` (COSE identifiers). When writing, `algo_id` must not conflict with the algorithm identifiers of ES256 / EdDSA / ML-DSA-65, otherwise `6A80` is returned.
 
 #### Request
 
@@ -266,7 +267,7 @@ Reading returns the 8-byte configuration data.
 
 ### 10. NFC Enable
 
-Read or set whether NFC is enabled. This command is implemented by the hardware platform. Setting requires a verified PIN.
+Read or set whether NFC is enabled (requires firmware 3.0.0 or above). This command is implemented by the hardware platform. Setting requires a verified PIN.
 
 #### Request
 
@@ -324,7 +325,7 @@ Read the version of the firmware, the hardware variant, or the canokey-core comm
 | ----- | ----- |
 | CLA   | 00h   |
 | INS   | 31h   |
-| P1    | 00h for firmware version, 01h for hardware variant, 02h for canokey-core commit hash |
+| P1    | 00h for firmware version, 01h for hardware variant, 02h for canokey-core commit hash (requires firmware 3.1.1 or above) |
 | P2    | 00h   |
 | Le    | 00h   |
 
@@ -363,7 +364,8 @@ The raw data.
 Configure the LED, NDEF, WebUSB and the enabled state of applets:
 
 - The LED can be configured ON or OFF when not blinking. **The default value is ON.**
-- NDEF, the WebUSB landing page and all feature switches are **ON by default.**
+- The NDEF and WebUSB landing page switches require firmware 2.0.0 or above; both are **ON by default.**
+- The feature switches (P1 = 06h) require firmware 3.1.1 or above; all are **ON by default.**
 
 #### Request
 
@@ -402,7 +404,7 @@ Get the flash usage. No PIN verification is required.
 | ----- | ----- |
 | CLA   | 00h   |
 | INS   | 41h   |
-| P1    | 00h for total usage, 01h for per-applet usage |
+| P1    | 00h for total usage, 01h for per-applet usage (requires firmware 3.1.1 or above) |
 | P2    | 00h   |
 | Le    | At least 2 for P1 = 00h; at least 48 for P1 = 01h |
 
@@ -455,7 +457,7 @@ Get current configurations. No PIN verification is required.
 | 3    | NDEF read-only |
 | 4    | NDEF enabled   |
 | 5    | WebUSB landing page enabled |
-| 6    | Feature bitmask (same as Config) |
+| 6    | Feature bitmask (same as Config; requires firmware 3.1.1 or above) |
 
 | SW   | Description |
 | ---- | ----------- |
@@ -463,7 +465,7 @@ Get current configurations. No PIN verification is required.
 
 ### 17. Read / Write Pass Config
 
-Read or configure the touch output (Pass) applet. Pass has two slots: short touch and long touch. OATH slots are set by the OATH applet and cannot be written through Write Pass Config.
+Read or configure the touch output (Pass) applet (requires firmware 3.0.0 or above). Pass has two slots: short touch and long touch. OATH slots are set by the OATH applet and cannot be written through Write Pass Config. The HMAC-SHA1 slot type requires firmware 3.1.1 or above.
 
 Read Pass Config (43h) returns the configuration of the two slots, short touch first, then long touch. The first byte of each slot is its type:
 
@@ -501,7 +503,7 @@ The first byte of Data is the type:
 
 ### 18. KBD Keymap
 
-Manage the keyboard layout used for keyboard output. The layout is a fixed 128-entry table; entry N maps ASCII code N to two bytes `{modifier, HID usage}`. A usage of 0 means the character is skipped. Once written, the stored table replaces the built-in QWERTY layout.
+Manage the keyboard layout used for keyboard output (requires firmware 3.1.1 or above). The layout is a fixed 128-entry table; entry N maps ASCII code N to two bytes `{modifier, HID usage}`. A usage of 0 means the character is skipped. Once written, the stored table replaces the built-in QWERTY layout.
 
 #### Write KBD Keymap (45h)
 
