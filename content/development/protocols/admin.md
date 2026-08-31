@@ -8,8 +8,7 @@ To manage your CanoKey, you can use the admin applet to
 
 - Reset OpenPGP / PIV / OATH / CTAP / NDEF / Pass.
 - Import FIDO private key and certification.
-- Configure the LED, NDEF, WebUSB and the enabled state of applets.
-- Configure touch output (Pass) and the keyboard layout.
+- Configure the LED, NDEF, WebUSB, and touch output (Pass).
 - Read firmware version, serial number and storage usage.
 
 ### 1. General Definitions
@@ -51,9 +50,6 @@ Some instructions or features require a specific firmware version or above; see 
 | Read Config            | 42h  | N                          |
 | Read Pass Config       | 43h  | Y                          |
 | Write Pass Config      | 44h  | Y                          |
-| Write KBD Keymap       | 45h  | Y                          |
-| Read KBD Keymap        | 46h  | Y                          |
-| Clear KBD Keymap       | 47h  | Y                          |
 | Factory Reset          | 50h  | N                          |
 | Select                 | A4h  | N                          |
 | Vendor Specific        | FFh  | Y                          |
@@ -242,7 +238,7 @@ Set if NDEF is read-only.
 
 ### 9. Read / Write CTAP SM2 Config
 
-Read or write the SM2 configuration of the CTAP applet (requires firmware 3.0.0 or above). The configuration is 8 bytes: a 32-bit `curve_id` followed by a 32-bit `algo_id` (COSE identifiers). When writing, `algo_id` must not conflict with the algorithm identifiers of ES256 / EdDSA / ML-DSA-65, otherwise `6A80` is returned.
+Read or write the SM2 configuration of the CTAP applet (requires firmware 3.0.0 or above). The configuration is 8 bytes: a 32-bit `curve_id` followed by a 32-bit `algo_id` (COSE identifiers). When writing, `algo_id` must not conflict with the algorithm identifiers of ES256 or EdDSA, otherwise `6A80` is returned.
 
 #### Request
 
@@ -317,7 +313,7 @@ If you build your own CanoKey, you should use this command to write the SN. Othe
 
 ### 12. Get version
 
-Read the version of the firmware, the hardware variant, or the canokey-core commit hash.
+Read the version of the firmware or the hardware variant.
 
 #### Request
 
@@ -325,7 +321,7 @@ Read the version of the firmware, the hardware variant, or the canokey-core comm
 | ----- | ----- |
 | CLA   | 00h   |
 | INS   | 31h   |
-| P1    | 00h for firmware version, 01h for hardware variant, 02h for canokey-core commit hash (requires firmware 3.1.1 or above) |
+| P1    | 00h for firmware version, 01h for hardware variant |
 | P2    | 00h   |
 | Le    | 00h   |
 
@@ -361,11 +357,10 @@ The raw data.
 
 ### 14. Config
 
-Configure the LED, NDEF, WebUSB and the enabled state of applets:
+Configure the LED, NDEF, and WebUSB landing page:
 
 - The LED can be configured ON or OFF when not blinking. **The default value is ON.**
 - The NDEF and WebUSB landing page switches require firmware 2.0.0 or above; both are **ON by default.**
-- The feature switches (P1 = 06h) require firmware 3.1.1 or above; all are **ON by default.**
 
 #### Request
 
@@ -373,19 +368,8 @@ Configure the LED, NDEF, WebUSB and the enabled state of applets:
 | ----- | ----- |
 | CLA   | 00h   |
 | INS   | 40h   |
-| P1    | 01h: LED; 04h: NDEF; 05h: WebUSB landing page; 06h: feature switches |
-| P2    | For P1 = 01h/04h/05h: 00h to disable, 01h to enable. For P1 = 06h: feature bitmask (see below) |
-
-When P1 is 06h, each bit of P2 controls a feature (1 = enabled), and Lc must be 0:
-
-| Bit | Feature       |
-| --- | ------------- |
-| 0   | Pass          |
-| 1   | OpenPGP CCID  |
-| 2   | OpenPGP NFC   |
-| 3   | PIV CCID      |
-| 4   | PIV NFC       |
-| 5   | WebAuthn      |
+| P1    | 01h: LED; 04h: NDEF; 05h: WebUSB landing page |
+| P2    | 00h to disable, 01h to enable |
 
 #### Response
 
@@ -404,28 +388,13 @@ Get the flash usage. No PIN verification is required.
 | ----- | ----- |
 | CLA   | 00h   |
 | INS   | 41h   |
-| P1    | 00h for total usage, 01h for per-applet usage (requires firmware 3.1.1 or above) |
+| P1    | 00h |
 | P2    | 00h   |
-| Le    | At least 2 for P1 = 00h; at least 48 for P1 = 01h |
+| Le    | At least 2 |
 
 #### Response
 
 For P1 = 00h, two bytes are returned: the first byte is the used space in KiB, and the second is the total size of the flash in KiB.
-
-For P1 = 01h, 8 records of 6 bytes each are returned: `applet ID (1 byte) || flags (1 byte) || logical bytes (4 bytes, big-endian)`. The applet IDs are:
-
-| ID  | Applet  |
-| --- | ------- |
-| 00h | System (file system overhead not attributable to applets) |
-| 01h | Admin   |
-| 02h | OpenPGP |
-| 03h | PIV     |
-| 04h | OATH    |
-| 05h | CTAP    |
-| 06h | NDEF    |
-| 07h | Pass    |
-
-Bit 0 of the flags is set when some files or attributes of the applet are absent (counted as zero), for example right after the applet is reset.
 
 | SW   | Description |
 | ---- | ----------- |
@@ -444,11 +413,11 @@ Get current configurations. No PIN verification is required.
 | INS   | 42h   |
 | P1    | 00h   |
 | P2    | 00h   |
-| Le    | At least 6 |
+| Le    | At least 5 |
 
 #### Response
 
-6 bytes in total.
+5 bytes in total.
 
 | Byte | Meaning        |
 | ---- | -------------- |
@@ -457,7 +426,6 @@ Get current configurations. No PIN verification is required.
 | 3    | NDEF read-only |
 | 4    | NDEF enabled   |
 | 5    | WebUSB landing page enabled |
-| 6    | Feature bitmask (same as Config; requires firmware 3.1.1 or above) |
 
 | SW   | Description |
 | ---- | ----------- |
@@ -465,7 +433,7 @@ Get current configurations. No PIN verification is required.
 
 ### 17. Read / Write Pass Config
 
-Read or configure the touch output (Pass) applet (requires firmware 3.0.0 or above). Pass has two slots: short touch and long touch. OATH slots are set by the OATH applet and cannot be written through Write Pass Config. The HMAC-SHA1 slot type requires firmware 3.1.1 or above.
+Read or configure the touch output (Pass) applet (requires firmware 3.0.0 or above). Pass has two slots: short touch and long touch. OATH slots are set by the OATH applet and cannot be written through Write Pass Config.
 
 Read Pass Config (43h) returns the configuration of the two slots, short touch first, then long touch. The first byte of each slot is its type:
 
@@ -474,7 +442,6 @@ Read Pass Config (43h) returns the configuration of the two slots, short touch f
 | 00h  | Off        | None                                         |
 | 01h  | OATH       | Name length, name, with-enter flag           |
 | 02h  | Static     | With-enter flag (the password is not returned) |
-| 03h  | HMAC-SHA1  | None (the key is not returned)               |
 
 The request of Write Pass Config (44h):
 
@@ -490,7 +457,6 @@ The first byte of Data is the type:
 
 - `00h`: disable the slot, Lc = 1.
 - `02h`: static password, formatted as `02h || password length || password || with-enter flag`. The password is at most 32 bytes.
-- `03h`: HMAC-SHA1, formatted as `03h || 14h || 20-byte key`.
 
 #### Response
 
@@ -501,52 +467,7 @@ The first byte of Data is the type:
 | 6A80 | Incorrect data |
 | 6A86 | Incorrect P1/P2 |
 
-### 18. KBD Keymap
-
-Manage the keyboard layout used for keyboard output (requires firmware 3.1.1 or above). The layout is a fixed 128-entry table; entry N maps ASCII code N to two bytes `{modifier, HID usage}`. A usage of 0 means the character is skipped. Once written, the stored table replaces the built-in QWERTY layout.
-
-#### Write KBD Keymap (45h)
-
-| Field | Value |
-| ----- | ----- |
-| CLA   | 00h   |
-| INS   | 45h   |
-| P1    | 00h   |
-| P2    | Layout ID (host-defined, used to identify the layout) |
-| Lc    | Length of the keymap (256) |
-| Data  | 128 consecutive `{modifier, HID usage}` entries |
-
-#### Read KBD Keymap (46h)
-
-| Field | Value |
-| ----- | ----- |
-| CLA   | 00h   |
-| INS   | 46h   |
-| P1    | 00h   |
-| P2    | 00h to read the layout ID (1 byte returned); 01h to read the keymap (256 bytes returned) |
-
-`6A88` is returned if no keymap has been written.
-
-#### Clear KBD Keymap (47h)
-
-| Field | Value |
-| ----- | ----- |
-| CLA   | 00h   |
-| INS   | 47h   |
-| P1    | 00h   |
-| P2    | 00h   |
-| Lc    | 0     |
-
-#### Response
-
-| SW   | Description |
-| ---- | ----------- |
-| 9000 | Success     |
-| 6700 | Incorrect length |
-| 6A86 | Incorrect P1/P2 |
-| 6A88 | Keymap not found |
-
-### 19. Factory Reset
+### 18. Factory Reset
 
 Reset all the applets (including the PIN and configuration of the admin applet itself; the SN is not reset). All FIDO2 credentials will be invalidated.
 PIN retries must be used up for reset to begin, and the command is not available over NFC.
@@ -572,6 +493,6 @@ Once the command is executed, you must **touch within 2 seconds when blinking** 
 | 6985 | PIN not locked yet, or accessed over NFC |
 | 6A80 | Incorrect data |
 
-### 20. Vendor specific
+### 19. Vendor specific
 
 This command isThis command is defined by the hardware platform (e.g. entering the firmware update mode). It requires a verified PIN and should not be used directly.

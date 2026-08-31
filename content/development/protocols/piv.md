@@ -6,8 +6,6 @@ weight: 25
 
 The CanoKey PIV applet implements the mandatory features of [NIST SP 800-73-4](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf) and a set of extensions. This page documents CanoKey-specific behavior and the commands exposed by the implementation. Refer to NIST SP 800-73-4 for the standard command and TLV definitions.
 
-Unless a section states otherwise, the extensions documented on this page require firmware version 3.1.1 or later.
-
 ## 1. Application and Transport
 
 ### 1.1 AID
@@ -23,12 +21,6 @@ Select it with `00 A4 04 00 0B A000000308000010000100`.
 ### 1.2 APDU Transport
 
 CanoKey accepts short APDUs. Extended-length command APDUs are rejected with `6700`.
-
-ISO 7816-4 command chaining (`CLA = 10`) is supported for:
-
-- General Authenticate (`INS = 87`)
-- Put Data (`INS = DB`)
-- Import Asymmetric Key (`INS = FE`)
 
 When response data does not fit in one response, CanoKey returns `61xx`. Use Get Response (`INS = C0`) to retrieve the remaining data.
 
@@ -46,11 +38,8 @@ When response data does not fit in one response, CanoKey returns `61xx`. Use Get
 | `CB` | Get Data | NIST SP 800-73-4 |
 | `DB` | Put Data | NIST SP 800-73-4 |
 | `EE` | Algorithm Extension | CanoKey extension |
-| `F6` | Move/Delete Key | Yubico-compatible extension |
 | `F7` | Get Metadata | Yubico-compatible extension |
 | `F8` | Get Serial | Yubico-compatible extension |
-| `F9` | Attest | Yubico-compatible extension |
-| `FA` | Set PIN Retries | Yubico-compatible extension |
 | `FB` | Reset | Yubico-compatible extension |
 | `FD` | Get Version | Yubico-compatible extension |
 | `FE` | Import Asymmetric Key | Yubico-compatible extension |
@@ -73,20 +62,17 @@ The standard algorithm IDs are fixed. IDs for the extended algorithms are config
 | X25519 | `E1` | 3.0.0+ |
 | secp256k1 | `53` | 3.0.0+ |
 | SM2 | `54` | 3.0.0+ |
-| NIST P-521 | `15` | 3.1.1+ |
-| ML-DSA-65 | `E2` | 3.1.1+ |
-| ML-KEM-768 | `E3` | 3.1.1+ |
 
 Firmware version 3.0.0 accepts only 32-byte input for Ed25519 signing and only internally generated X25519 keys. Firmware version 3.0.2 and later remove these restrictions.
 
 ### 2.2 Algorithm Extension Command
 
-The Algorithm Extension command reads or writes the ten-byte extended-algorithm configuration record.
+The Algorithm Extension command reads or writes the seven-byte extended-algorithm configuration record.
 
 | Operation | APDU header | Authentication | Data |
 |:----------|:------------|:---------------|:-----|
 | Read | `00 EE 01 00` | None | Empty |
-| Write | `00 EE 02 00` | Management key | Ten-byte record |
+| Write | `00 EE 02 00` | Management key | Seven-byte record |
 
 The record fields are ordered as follows:
 
@@ -98,10 +84,7 @@ The record fields are ordered as follows:
 | 3 | RSA 4096 ID | `16` |
 | 4 | X25519 ID | `E1` |
 | 5 | secp256k1 ID | `53` |
-| 6 | NIST P-521 ID | `15` |
-| 7 | SM2 ID | `54` |
-| 8 | ML-DSA-65 ID | `E2` |
-| 9 | ML-KEM-768 ID | `E3` |
+| 6 | SM2 ID | `54` |
 
 The enable field must be `00` or `01`. Algorithm IDs can use any byte value and may overlap. A successful write takes effect immediately.
 
@@ -110,133 +93,47 @@ The enable field must be `00` or `01`. Algorithm IDs can use any byte value and 
 | Slot | Purpose | Default PIN policy | Default touch policy |
 |:----:|:--------|:-------------------|:---------------------|
 | `9A` | PIV Authentication | Once | Never |
-| `9C` | Digital Signature | Always | Never |
+| `9C` | Digital Signature | Once | Never |
 | `9D` | Key Management | Once | Never |
 | `9E` | Card Authentication | Never | Never |
-| `82`-`95` | Retired Key Management | Once | Never |
-| `F9` | Attestation | Not applicable | Not applicable |
+| `82`-`83` | Retired Key Management | Once | Never |
 
-Firmware version 2.0.0 supports Retired Key Management slots `82` and `83`. Firmware version 3.1.1 supports the complete range from `82` through `95`; storage for these slots is allocated only when used.
-
-The attestation slot accepts only a P-256 key. Its key and certificate are provisioned separately and are preserved when the PIV application is reset.
+Firmware version 2.0.0 and later support Retired Key Management slots `82` and `83`.
 
 PIN policies use `Never`, `Once`, and `Always`. Touch policies use `Never`, `Always`, and `Cached`; the cached interval is 15 seconds. Touch requirements apply only over USB and are not enforced over NFC.
 
 ## 4. Data Objects
 
-Get Data and Put Data use the standard `5C` tag list and `53` data container defined by NIST SP 800-73-4. All writable objects require management-key authentication. Optional objects are allocated only after they are written.
+Get Data and Put Data use the standard `5C` tag list and `53` data container defined by NIST SP 800-73-4. All writable objects require management-key authentication.
 
-| Tag | Data object | Capacity | Read access |
-|:---:|:------------|---------:|:------------|
-| `7E` | Discovery Object | Synthesized | Public, read-only |
-| `7F61` | Biometric Information Templates Group Template | Synthesized | Public, read-only |
-| `5FC101` | Card Authentication Certificate | 6144 bytes | Public |
-| `5FC102` | Cardholder Unique Identifier | 2916 bytes | Public |
-| `5FC103` | Cardholder Fingerprints | 512 bytes | PIN |
-| `5FC105` | PIV Authentication Certificate | 6144 bytes | Public |
-| `5FC106` | Security Object | 245 bytes | Public |
-| `5FC107` | Card Capability Container | 287 bytes | Public |
-| `5FC108` | Cardholder Facial Image | 512 bytes | PIN |
-| `5FC109` | Printed Information | 245 bytes | PIN |
-| `5FC10A` | Digital Signature Certificate | 6144 bytes | Public |
-| `5FC10B` | Key Management Certificate | 6144 bytes | Public |
-| `5FC10C` | Key History Object | 32 bytes | Public |
-| `5FC10D`-`5FC120` | Retired Key Management Certificates | 6144 bytes each | Public |
-| `5FC121` | Cardholder Iris Images | 512 bytes | PIN |
-| `5FFF00` | Pairing Code Reference Data / Admin Data | 128 bytes | Public |
-| `5FFF01` | Attestation Certificate | 6144 bytes | Public |
+| Tag | Data object | Capacity |
+|:---:|:------------|---------:|
+| `7E` | Discovery Object | Synthesized |
+| `5FC101` | Card Authentication Certificate | 3000 bytes |
+| `5FC102` | Cardholder Unique Identifier | 2916 bytes |
+| `5FC105` | PIV Authentication Certificate | 3000 bytes |
+| `5FC107` | Card Capability Container | 287 bytes |
+| `5FC109` | Printed Information | 245 bytes |
+| `5FC10A` | Digital Signature Certificate | 3000 bytes |
+| `5FC10B` | Key Management Certificate | 3000 bytes |
+| `5FC10D`-`5FC10E` | Retired Key Management Certificates | 3000 bytes each |
+Certificate capacities are 3000 bytes on firmware version 1.6 and later and 1000 bytes on firmware version 1.5 and earlier.
 
-The `5FFF01` attestation certificate object is preserved by a PIV reset. Other writable data objects are cleared.
+## 5. Other Extension Commands
 
-Certificate capacities are 6144 bytes on firmware version 3.1.1 and later, 3000 bytes on firmware versions 1.6 to 3.0.x, and 1000 bytes on firmware version 1.5 and earlier.
-
-## 5. Firmware 3.1.1 Extensions
-
-### 5.1 AES-192 Management Key
-
-The management key is 24 bytes and uses AES-192, algorithm ID `0A`. The default value is:
-
-```text
-01 02 03 04 05 06 07 08 01 02 03 04 05 06 07 08
-01 02 03 04 05 06 07 08
-```
-
-Set Management Key uses the Yubico-compatible data form `0A 9B 18 <24-byte-key>`. `P2 = FF` disables touch for management-key authentication; `P2 = FE` requires touch.
-
-### 5.2 Set PIN Retries
-
-Set the PIN and PUK retry limits with:
-
-```text
-00 FA <pin-retries> <puk-retries>
-```
-
-The command has no data field. Both retry values must be between 1 and 15. Management-key authentication and PIN verification are both required before the command is sent.
-
-A successful command resets the PIN to `123456` and the PUK to `12345678`, with the requested retry limits.
-
-### 5.3 Move or Delete a Key
-
-Move a key between slots with:
-
-```text
-00 F6 <destination-slot> <source-slot>
-```
-
-Delete a key by setting the destination slot to `FF`:
-
-```text
-00 F6 FF <source-slot>
-```
-
-Both commands have no data field and require management-key authentication. The destination slot must be empty. These operations affect only the private key and its metadata; certificate data objects are not moved or deleted.
-
-### 5.4 Attest a Key
-
-Request an attestation certificate with:
-
-```text
-00 F9 <slot> 00
-```
-
-The command has no data field and requires neither PIN verification nor management-key authentication. It returns a DER-encoded X.509 certificate signed by the P-256 key in slot `F9`.
-
-Only keys generated on the device can be attested. Imported keys are rejected. The attestation key in slot `F9` and its issuer certificate in data object `5FFF01` must be provisioned before this command can be used; both survive a PIV reset.
-
-## 6. Other Extension Commands
-
-### 6.1 Get Metadata
+### 5.1 Get Metadata
 
 Use `00 F7 00 <reference>` with no data. The reference can be PIN (`80`), PUK (`81`), management key (`9B`), or a supported asymmetric-key slot. The response follows the Yubico PIV metadata TLV format and reports values such as algorithm, policies, origin, public key, default status, and retry counters where applicable.
 
-A compact metadata directory is available with `00 F7 01 00` and no data. It lists, in a single response, which key slots hold a key or a certificate, without requiring authentication. The response contains two TLVs:
-
-```text
-01 01 <version>  02 <length>  <entries>
-```
-
-Tag `01` carries the one-byte directory version (currently `01`). Tag `02` carries the entry payload, with one six-byte entry per slot:
-
-| Byte | Content |
-|:----:|:--------|
-| 0 | Slot ID |
-| 1 | Flags: bit `01` set when a key is present, bit `02` set when a certificate is present |
-| 2 | Algorithm ID, or `00` when no key is present |
-| 3 | Origin (`01` generated on device, `02` imported), or `00` when no key is present |
-| 4 | PIN policy, or `00` when no key is present |
-| 5 | Touch policy, or `00` when no key is present |
-
-Slots are enumerated in the order `9A`, `9C`, `9D`, `9E`, then `82` through `95`; slots with neither a key nor a certificate are omitted, so the payload holds at most 24 entries.
-
-### 6.2 Get Serial and Version
+### 5.2 Get Serial and Version
 
 - `00 F8 00 00` returns the four-byte device serial number.
 - `00 FD 00 00` returns the three-byte PIV applet version.
 
-### 6.3 Import Asymmetric Key
+### 5.3 Import Asymmetric Key
 
-Use `INS = FE`, with the algorithm ID in `P1` and the destination slot in `P2`. Management-key authentication is required. The command supports ISO 7816-4 command chaining for key material that does not fit in one short APDU. The imported key format follows the Yubico PIV TLV format.
+Use `INS = FE`, with the algorithm ID in `P1` and the destination slot in `P2`. Management-key authentication is required. The imported key format follows the Yubico PIV TLV format.
 
-### 6.4 Reset
+### 5.4 Reset
 
-Use `00 FB 00 00` with no data. Reset is accepted only when both PIN and PUK are blocked. It restores PIV user data and defaults while preserving the attestation key in slot `F9` and the attestation certificate in data object `5FFF01`.
+Use `00 FB 00 00` with no data. Reset is accepted only when both PIN and PUK are blocked. It restores PIV user data and defaults.

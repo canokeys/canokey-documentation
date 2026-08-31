@@ -20,11 +20,7 @@ D2 76 00 01 24 01
 
 ### 1.2 APDU 传输
 
-CanoKey 接受短 APDU。命令使用 `CLA = 00`；固件版本 3.1.1 及更高版本还接受对以下指令使用 ISO 7816-4 命令链（`CLA = 10`）：
-
-- 持卡人证书的 Put Data（`INS = DA`，`P1 = 7F`，`P2 = 21`）
-- Import Key（`INS = DB`）
-- PSO Decipher（`INS = 2A`，`P1 = 80`，`P2 = 86`）
+CanoKey 接受短 APDU。命令使用 `CLA = 00`。
 
 当响应数据无法在一次响应中返回时，CanoKey 返回 `61xx`。使用 Get Response（`INS = C0`）获取剩余数据。
 
@@ -48,7 +44,6 @@ CanoKey 接受短 APDU。命令使用 `CLA = 00`；固件版本 3.1.1 及更高�
 | `DA` | Put Data | OpenPGP 卡规范 |
 | `DB` | Import Key | OpenPGP 卡规范 |
 | `E6` | Terminate DF | OpenPGP 卡规范 |
-| `F2` | Set PIN Retries | CanoKey 扩展，3.1.1+ |
 
 该规范的以下可选特性不受支持：KDF、Secure Messaging、AES，以及 Manage Security Environment 命令。
 
@@ -67,16 +62,6 @@ Verify 使用 `P1 = 00`，`P2 = 81`（用于签名的 PW1）、`P2 = 82`（用�
 PW Status 数据对象（`C4`）的第一个字节控制以引用 `81` 验证的 PW1 是被每次签名消耗（`00`，出厂默认：每次 PSO 签名都需要验证）还是被保留（`01`）。
 
 Reset Retry Counter 接受 `P1 = 00`（数据字段中为 Reset Code；未设置 Reset Code 时会被拒绝并返回 `6982`），或 `P1 = 02`（需先验证 Admin PIN）。两种情况下，数据字段中随后都应跟上新的 PIN。
-
-### 2.1 Set PIN Retries（3.1.1+）
-
-固件版本 3.1.1 及更高版本允许使用以下命令配置重试次数上限：
-
-```text
-00 F2 00 00 03 <pw1-retries> <rc-retries> <pw3-retries>
-```
-
-每个值必须在 1 到 15 之间。需要验证 Admin PIN（PW3）。命令成功执行后，PIN 会被重置为 `123456`，Admin PIN 会被重置为 `12345678`，并采用所请求的重试次数上限；已有的 Reset Code 值会被保留，但其重试计数器会更新。
 
 ## 3. 密钥与算法
 
@@ -100,7 +85,6 @@ Reset Retry Counter 接受 `P1 = 00`（数据字段中为 Reset Code；未设置
 | ECDSA / ECDH NIST P-256 | `13` / `12` + OID `2A 86 48 CE 3D 03 01 07` | 所有受支持的固件版本 |
 | ECDSA / ECDH secp256k1 | `13` / `12` + OID `2B 81 04 00 0A` | 所有受支持的固件版本 |
 | ECDSA / ECDH NIST P-384 | `13` / `12` + OID `2B 81 04 00 22` | 所有受支持的固件版本 |
-| ECDSA / ECDH NIST P-521 | `13` / `12` + OID `2B 81 04 00 23` | 3.1.1+ |
 | Ed25519 (SIG, AUT) | `16` + OID `2B 06 01 04 01 DA 47 0F 01` | 所有受支持的固件版本 |
 | X25519 (DEC) | `12` + OID `2B 06 01 04 01 97 55 01 05 01` | 所有受支持的固件版本 |
 | SM2 | `13` / `12` + OID `06 08 2A 81 1C CF 55 01 82 2D` | 2.0.0+ |
@@ -162,7 +146,7 @@ Application Related Data `6E` 包含 AID `4F`、Historical Bytes `5F52`、Extend
 
 ### 4.2 Put Data
 
-Put Data 使用 `INS = DA`，标签放在 `P1:P2` 中。所有写入都需要验证 Admin PIN。可写标签：`5B`、`5E`、`5F2D`、`5F35`、`5F50`、`7F21`（固件 3.1.1 及更高版本支持命令链）、`C1`-`C3`（算法属性）、`C4`（仅第一个字节，`00` 或 `01`）、`C7`-`C9`（密钥指纹）、`CA`-`CC`（CA 指纹）、`CE`-`D0`（密钥生成日期）、`D3`（Reset Code；空数据字段将其移除）、`D6`-`D8`（UIF），以及 `0102`（触摸缓存时间）。
+Put Data 使用 `INS = DA`，标签放在 `P1:P2` 中。所有写入都需要验证 Admin PIN。可写标签：`5B`、`5E`、`5F2D`、`5F35`、`5F50`、`7F21`、`C1`-`C3`（算法属性）、`C4`（仅第一个字节，`00` 或 `01`）、`C7`-`C9`（密钥指纹）、`CA`-`CC`（CA 指纹）、`CE`-`D0`（密钥生成日期）、`D3`（Reset Code；空数据字段将其移除）、`D6`-`D8`（UIF），以及 `0102`（触摸缓存时间）。
 
 ### 4.3 证书实例
 

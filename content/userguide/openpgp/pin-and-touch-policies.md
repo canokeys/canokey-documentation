@@ -18,8 +18,6 @@ The OpenPGP application on CanoKey uses a user PIN, an Admin PIN, and an optiona
 | Touch Cache Time | 0 | — | — |
 | Retry counters (PIN, Reset Code, Admin PIN) | 3 | — | — |
 
-Firmware version 3.1.1 and later allow management software to set the retry counters for PIN, Reset Code, and Admin PIN from 1 to 15. Changing these values resets PIN and Admin PIN to their defaults. An existing Reset Code is not changed, but its retry counter is reset.
-
 ## PIN Policy
 
 For DEC and AUT keys, after the PIN verification is successful, verification will not be required again until CanoKey is disconnected and reinserted.

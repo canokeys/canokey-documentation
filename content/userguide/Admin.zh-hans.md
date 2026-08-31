@@ -21,12 +21,6 @@ CanoKey Pigeon 在 iOS App 中仅支持通过 NFC 访问。
 * WebUSB 登录页面：默认启用
 * 重置
 
-固件版本 3.1.1 起新增功能开关，可分别启用或停用 Password/HOTP 键盘输出、通过 USB 或 NFC 使用 OpenPGP 和 PIV，以及 WebAuthn。管理软件还可以查看设备存储空间的总用量和各应用用量、查看设备所用 `canokey-core` 的具体版本，以及安装包含 128 个条目的自定义键盘布局。
-
-{{% notice note %}}
-以上设置需要 3.1.1 或更高版本固件。界面中是否显示相应设置，还取决于 CanoKey Console 的版本。
-{{% /notice %}}
-
 ## 2. 重置
 
 ### 2.1 单独重置应用

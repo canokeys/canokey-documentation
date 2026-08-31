@@ -11,7 +11,7 @@ pre = "<b>1. </b>"
 ## Glossary
 
 - **FIDO**: Fast Identity Online, an open industry alliance dedicated to setting and promoting passwordless authentication standards.
-- **WebAuthn**: Web Authentication, an authentication protocol defined by W3C. CanoKey supports CTAP 2.0, CTAP 2.1 from firmware version 2.0.0, and CTAP 2.3 from firmware version 3.1.1.
+- **WebAuthn**: Web Authentication, an authentication protocol defined by W3C. CanoKey supports CTAP 2.0 and CTAP 2.1 from firmware version 2.0.0.
 - **Passkey**: A Passkey is an implementation of WebAuthn. CanoKey can store Passkey keys through the CTAP protocol.
 - **OpenPGP**: Open Pretty Good Privacy, an open standard protocol used for encrypting and signing data, widely used for securing communications such as emails. CanoKey supports all mandatory features in OpenPGP 3.4.1.
 - **GnuPG**: Gnu Privacy Guard, a free software tool implementing the OpenPGP standard, used for encrypting and signing data.
@@ -24,7 +24,7 @@ pre = "<b>1. </b>"
 
 ## Compatibility Labels
 
-This documentation identifies feature compatibility only by the minimum firmware version. For example, **3.1.1+** means that a feature requires firmware version 3.1.1 or later.
+This documentation identifies feature compatibility only by the minimum firmware version. For example, **2.0.0+** means that a feature requires firmware version 2.0.0 or later.
 
 ## Default PINs
 

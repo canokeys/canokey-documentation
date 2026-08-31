@@ -18,8 +18,6 @@ CanoKey 的 OpenPGP 应用使用用户 PIN、Admin PIN 和可选的 Reset Code�
 | 触摸缓存时间 | 0 | — | — |
 | 重试次数（PIN、Reset Code、Admin PIN） | 3 | — | — |
 
-固件版本 3.1.1 起允许管理软件将 PIN、Reset Code 和 Admin PIN 的重试次数设置为 1 至 15。修改后，PIN 和 Admin PIN 将恢复为默认值；已有的 Reset Code 不会改变，但其重试计数会重置。
-
 ## PIN 策略
 
 对于 DEC 和 AUT 密钥，PIN 验证成功后，将不再需要验证，直到断开并重新插入 CanoKey。

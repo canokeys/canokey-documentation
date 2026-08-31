@@ -12,16 +12,12 @@ weight = 4
 | 9C（Digital Signature） | `5FC10A` |
 | 9D（Key Management） | `5FC10B` |
 | 9E（Card Authentication） | `5FC101` |
-| 82–95（Retired Key Management） | `5FC10D`–`5FC120` |
-| F9（Attestation） | `5FFF01` |
+| 82–83（Retired Key Management） | `5FC10D`–`5FC10E` |
 
 证书对象的最大容量取决于固件版本：
 
 * 固件版本 1.5 或更早：1000 字节
-* 固件版本 1.6 至 3.0.x：3000 字节
-* 固件版本 3.1.1 或更新：6144 字节
-
-固件 3.1.1 及更高版本支持所有 Retired Key Management 证书对象。与 Retired 槽位本身一样，它们的证书对象仅在使用时分配，写入后占用设备的可用存储空间。
+* 固件版本 1.6 或更新：3000 字节
 
 ## 写入证书
 

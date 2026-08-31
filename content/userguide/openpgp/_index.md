@@ -17,14 +17,12 @@ CanoKey implements the OpenPGP Card specification version 3.4, holding up to thr
 * Ed25519
 * NIST P-256 (secp256r1, prime256v1)
 * NIST P-384 (secp384r1)
-* NIST P-521 (secp521r1)
 * secp256k1
 * SM2
 
 {{% notice note %}}
 Firmware versions 1.6.1 and earlier only support RSA public keys with e = 65537.
 Firmware version 2.0.0 and later support RSA3072 / RSA4096 key generation.
-Firmware version 3.1.1 and later support NIST P-521.
 {{% /notice %}}
 
 ## In This Chapter

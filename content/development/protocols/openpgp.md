@@ -20,11 +20,7 @@ Select it with `00 A4 04 00 06 D27600012401`. The full AID, returned in the Appl
 
 ### 1.2 APDU Transport
 
-CanoKey accepts short APDUs. Commands use `CLA = 00`; firmware version 3.1.1 and later also accept ISO 7816-4 command chaining (`CLA = 10`) for:
-
-- Put Data of the cardholder certificate (`INS = DA`, `P1 = 7F`, `P2 = 21`)
-- Import Key (`INS = DB`)
-- PSO Decipher (`INS = 2A`, `P1 = 80`, `P2 = 86`)
+CanoKey accepts short APDUs. Commands use `CLA = 00`.
 
 When response data does not fit in one response, CanoKey returns `61xx`. Use Get Response (`INS = C0`) to retrieve the remaining data.
 
@@ -48,7 +44,6 @@ When response data does not fit in one response, CanoKey returns `61xx`. Use Get
 | `DA` | Put Data | OpenPGP card specification |
 | `DB` | Import Key | OpenPGP card specification |
 | `E6` | Terminate DF | OpenPGP card specification |
-| `F2` | Set PIN Retries | CanoKey extension, 3.1.1+ |
 
 The following optional features of the specification are not supported: KDF, Secure Messaging, AES, and the Manage Security Environment command.
 
@@ -67,16 +62,6 @@ Verify uses `P1 = 00` with `P2 = 81` (PW1 for signatures), `P2 = 82` (PW1 for de
 The first byte of the PW Status data object (`C4`) controls whether PW1 verified with reference `81` is consumed by each signature (`00`, the factory default: verification is required for every PSO signature) or kept (`01`).
 
 Reset Retry Counter accepts `P1 = 00` with the Reset Code in the data field (rejected with `6982` when no Reset Code is set), or `P1 = 02` with Admin PIN verification. In both cases a new PIN follows in the data field.
-
-### 2.1 Set PIN Retries (3.1.1+)
-
-Firmware version 3.1.1 and later allow configuring the retry limits with:
-
-```text
-00 F2 00 00 03 <pw1-retries> <rc-retries> <pw3-retries>
-```
-
-Each value must be between 1 and 15. Admin PIN (PW3) verification is required. A successful command resets the PIN to `123456` and the Admin PIN to `12345678` with the requested retry limits; an existing Reset Code value is preserved, but its retry counter is updated.
 
 ## 3. Keys and Algorithms
 
@@ -100,7 +85,6 @@ The algorithm attributes data objects `C1` (SIG), `C2` (DEC), and `C3` (AUT) are
 | ECDSA / ECDH NIST P-256 | `13` / `12` + OID `2A 86 48 CE 3D 03 01 07` | All supported firmware versions |
 | ECDSA / ECDH secp256k1 | `13` / `12` + OID `2B 81 04 00 0A` | All supported firmware versions |
 | ECDSA / ECDH NIST P-384 | `13` / `12` + OID `2B 81 04 00 22` | All supported firmware versions |
-| ECDSA / ECDH NIST P-521 | `13` / `12` + OID `2B 81 04 00 23` | 3.1.1+ |
 | Ed25519 (SIG, AUT) | `16` + OID `2B 06 01 04 01 DA 47 0F 01` | All supported firmware versions |
 | X25519 (DEC) | `12` + OID `2B 06 01 04 01 97 55 01 05 01` | All supported firmware versions |
 | SM2 | `13` / `12` + OID `06 08 2A 81 1C CF 55 01 82 2D` | 2.0.0+ |
@@ -162,7 +146,7 @@ The Application Related Data `6E` contains the AID `4F`, Historical Bytes `5F52`
 
 ### 4.2 Put Data
 
-Put Data uses `INS = DA` with the tag in `P1:P2`. All writes require Admin PIN verification. Writable tags: `5B`, `5E`, `5F2D`, `5F35`, `5F50`, `7F21` (with command chaining on firmware 3.1.1 and later), `C1`-`C3` (algorithm attributes), `C4` (first byte only, `00` or `01`), `C7`-`C9` (key fingerprints), `CA`-`CC` (CA fingerprints), `CE`-`D0` (key generation dates), `D3` (Reset Code; an empty data field removes it), `D6`-`D8` (UIF), and `0102` (touch cache time).
+Put Data uses `INS = DA` with the tag in `P1:P2`. All writes require Admin PIN verification. Writable tags: `5B`, `5E`, `5F2D`, `5F35`, `5F50`, `7F21`, `C1`-`C3` (algorithm attributes), `C4` (first byte only, `00` or `01`), `C7`-`C9` (key fingerprints), `CA`-`CC` (CA fingerprints), `CE`-`D0` (key generation dates), `D3` (Reset Code; an empty data field removes it), `D6`-`D8` (UIF), and `0102` (touch cache time).
 
 ### 4.3 Certificate Occurrences
 

@@ -23,14 +23,6 @@ PIV（Personal Identity Verification，即个人身份认证）由美国联邦�
 | X25519 | E1     |
 | SM2    | 54     |
 
-固件 3.1.1 及更高版本还支持：
-
-| 算法名称 | 算法ID |
-|:-------|:-------|
-| NIST P-521（`secp521r1`） | 15 |
-| ML-DSA-65 | E2 |
-| ML-KEM-768 | E3 |
-
 扩展算法的 ID 是可配置的；管理软件可以读取设备当前使用的扩展算法 ID，具体数值以设备返回为准。
 
 {{% notice note %}}
@@ -44,7 +36,6 @@ CanoKey 固件版本 3.0.0 仅支持使用 Ed25519 算法对 32 字节数据做�
 * [PIN 与触摸策略](pin-touch-policies/)——各槽位的验证与触摸要求
 * [证书](certificates/)——证书对象及其容量
 * [数据对象](data-objects/)——其他 PIV 数据对象及其尺寸限制
-* [设备证明](attestation/)——证明密钥是在设备上生成的
 * [密码学操作](crypto-operations/)——签名、解密与密钥协商
-* [元数据与密钥管理](metadata/)——读取元数据、移动与删除密钥
+* [元数据](metadata/)——读取密钥和凭据的元数据
 * [常用操作](operations/)——使用 yubico-piv-tool 完成常见任务

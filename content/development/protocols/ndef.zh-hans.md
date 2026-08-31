@@ -29,8 +29,6 @@ D2 76 00 00 85 01 01
 | `B0` | Read Binary |
 | `D6` | Update Binary |
 
-固件 3.1.1 及更高版本支持 Update Binary 的 ISO 7816-4 命令链（`CLA = 10`）。
-
 ## 2. Capability Container
 
 Capability Container 长度为 15 字节，从标签接口只能读取：

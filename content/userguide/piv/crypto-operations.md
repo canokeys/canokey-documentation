@@ -12,9 +12,9 @@ The asymmetric key slots are intended for different kinds of cryptographic opera
 | 9C (Digital Signature) | Signing emails, files, executables, git commits, etc. |
 | 9D (Key Management) | Encryption for confidentiality, e.g. decrypting emails |
 | 9E (Card Authentication) | Authenticating the card, usually for building access |
-| 82–95 (Retired Key Management) | Decrypting older data encrypted to keys with expired certificates |
+| 82–83 (Retired Key Management) | Decrypting older data encrypted to keys with expired certificates |
 
-Signing is not restricted to slot 9C: the keys in slots 9A, 9D, 9E, and 82–95 can sign as well. Slot 9B holds a symmetric key and cannot sign; slot F9 signs only attestation statements.
+Signing is not restricted to slot 9C: the keys in slots 9A, 9D, 9E, 82, and 83 can sign as well. Slot 9B holds a symmetric key and cannot sign.
 
 Slot 9D is used for decryption with RSA keys and for ECDH key agreement with EC keys.
 
@@ -22,4 +22,4 @@ ECDSA signatures are returned in ASN.1 DER encoding, as required by the PIV stan
 
 ## PIN and Touch Policy Interplay
 
-Whether an operation prompts for the PIN, a touch, or both is governed by the [PIN and touch policies](pin-touch-policies/) configured for the slot. For example, with the default policies, signing with slot 9C requires PIN verification for every use, while slot 9A requires it only once per session. Touch requirements apply only over USB and are not enforced over NFC. The policies in effect on a device can be read from its [metadata](metadata/).
+Whether an operation prompts for the PIN, a touch, or both is governed by the [PIN and touch policies](pin-touch-policies/) configured for the slot. For example, with the default policies, slot 9E does not require PIN verification, while slot 9A requires it once per session. Touch requirements apply only over USB and are not enforced over NFC. The policies in effect on a device can be read from its [metadata](metadata/).

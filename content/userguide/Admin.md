@@ -21,12 +21,6 @@ The main configuration contents of the settings include:
 * WebUSB Login Page: Enabled by default
 * Reset
 
-Firmware version 3.1.1 adds separate switches for Password/HOTP keyboard output, OpenPGP and PIV over USB or NFC, and WebAuthn. Management software can also display total and per-application storage usage, show the exact `canokey-core` version used by the device, and install a custom keyboard layout containing 128 entries.
-
-{{% notice note %}}
-These settings require firmware version 3.1.1 or later. Whether they appear in the interface also depends on the CanoKey Console version.
-{{% /notice %}}
-
 ## 2. Reset
 
 ### 2.1 Reset Application Individually
