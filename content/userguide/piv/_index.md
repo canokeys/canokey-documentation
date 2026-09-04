@@ -48,3 +48,5 @@ CanoKey firmware version 3.0.0 only supports signing 32-byte data using Ed25519 
 * [Cryptographic Operations](crypto-operations/) — signing, decryption, and key agreement
 * [Metadata and Key Management](metadata/) — reading metadata, moving and deleting keys
 * [Common Operations](operations/) — everyday tasks with yubico-piv-tool
+* [PKCS#11 Integration](pkcs11/) — the complete PIV interface for applications
+* [Windows Minidriver](minidriver/) — CSP/KSP integration and its supported subset

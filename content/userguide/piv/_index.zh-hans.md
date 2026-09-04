@@ -48,3 +48,5 @@ CanoKey 固件版本 3.0.0 仅支持使用 Ed25519 算法对 32 字节数据做�
 * [密码学操作](crypto-operations/)——签名、解密与密钥协商
 * [元数据与密钥管理](metadata/)——读取元数据、移动与删除密钥
 * [常用操作](operations/)——使用 yubico-piv-tool 完成常见任务
+* [PKCS#11 集成](pkcs11/)——面向应用的完整 PIV 接口
+* [Windows Minidriver](minidriver/)——CSP/KSP 集成及其支持范围

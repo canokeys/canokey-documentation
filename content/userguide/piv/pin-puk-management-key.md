@@ -18,6 +18,16 @@ The PUK (PIN Unblocking Key) exists to recover a blocked PIN. When the PIN has b
 
 The management key is the administrator credential. It is a 24-byte symmetric key with the default value `010203040506070801020304050607080102030405060708`. On firmware version 3.1.1 and later it uses AES-192 (algorithm ID `0A`); earlier firmware uses Triple-DES. The management key itself can be changed with the Set Management Key command.
 
+## PIN-protected Management Key (PIN-only)
+
+CanoKey supports the Yubico-compatible PIN-protected management-key mode. After the user PIN is verified, the PKCS#11 module can recover and authenticate the management key stored in protected PIV data. This allows Windows certificate enrollment and similar workflows to use the management key after an ordinary PIN prompt. PIN-derived mode is not supported.
+
+PIN-protected mode is a one-time card-provisioning choice, not a registry switch. The card must contain the protected management-key data and matching ADMIN DATA, and the PUK must be actually blocked with zero retries. Blocking the PUK prevents a PUK holder from resetting the PIN and recovering management authority, but permanently removes the PUK recovery path.
+
+For a prepared development card, the PKCS#11 project provides `finalize-pin-managed.ps1`. It requires an explicit acknowledgement, the expected slot ID, and the expected token serial before it blocks the PUK. It is not a general provisioning wizard; do not run it on a production card without an intentional recovery policy.
+
+When this mode is configured, the Windows minidriver uses it automatically after user authentication. See [Windows Minidriver](minidriver/) for the `ProtectManagement` setting and the Windows-specific behavior.
+
 ## Blocking and Unblocking
 
 Entering the PIN incorrectly exhausts its retry counter, after which the PIN is blocked and operations that require it fail. A blocked PIN can be unblocked with the PUK. If the PUK is also blocked, the PIV application can be reset; the Reset command is accepted only when both the PIN and the PUK are blocked. A reset restores the PIV user data and defaults while preserving the attestation key in slot F9 and the attestation certificate in data object `5FFF01`; other writable data objects are cleared.

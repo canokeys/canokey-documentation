@@ -18,6 +18,16 @@ PUK（PIN Unblocking Key，PIN 解锁密钥）用于恢复被锁定的 PIN。当
 
 管理密钥是管理员凭据，为 24 字节对称密钥，默认值为 `010203040506070801020304050607080102030405060708`。固件 3.1.1 及更高版本使用 AES-192（算法 ID `0A`）；更早的固件使用 Triple-DES。管理密钥本身可通过 Set Management Key 指令更换。
 
+## PIN-protected 管理密钥（PIN-only）
+
+CanoKey 支持 Yubico 兼容的 PIN-protected 管理密钥模式。用户 PIN 验证成功后，PKCS#11 模块可以从受保护的 PIV 数据中恢复并认证管理密钥，使 Windows 证书注册等流程能够在普通 PIN 提示后使用管理权限。当前不支持 PIN-derived 模式。
+
+PIN-protected 模式是一次性的卡片配置决定，不是修改注册表就能切换的开关。卡片必须已经写入受保护的管理密钥数据和匹配的 ADMIN DATA，并且 PUK 必须实际锁定（重试次数为 0）。阻断 PUK 可以防止 PUK 持有者重置 PIN 后恢复管理权限，但会永久失去 PUK 恢复路径。
+
+对于已经准备好的开发卡，PKCS#11 项目提供 `finalize-pin-managed.ps1`。该脚本要求显式确认、期望的 slot ID 和 token serial，才会阻断 PUK。它不是通用配置向导；没有明确的生产恢复策略时不要运行。
+
+配置完成后，Windows minidriver 会在用户认证后自动使用该模式。`ProtectManagement` 设置和 Windows 特有行为参见 [Windows Minidriver](minidriver/)。
+
 ## 锁定与解锁
 
 连续输错 PIN 会耗尽其重试次数，此后 PIN 被锁定，需要 PIN 的操作将失败。被锁定的 PIN 可以使用 PUK 解锁。如果 PUK 也被锁定，则可以重置 PIV 应用——Reset 指令仅在 PIN 和 PUK 均被锁定时才被接受。重置会将 PIV 用户数据恢复为默认值，但保留 F9 槽位的设备证明密钥和数据对象 `5FFF01` 中的设备证明证书；其余可写数据对象将被清空。
