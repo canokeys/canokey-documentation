@@ -29,6 +29,8 @@ Select it with `00 A4 04 00 07 D2760000850101`. Afterwards, select one of the tw
 | `B0` | Read Binary |
 | `D6` | Update Binary |
 
+Firmware version 3.1.1 and later support ISO 7816-4 command chaining (`CLA = 10`) for Update Binary.
+
 ## 2. Capability Container
 
 The Capability Container is 15 bytes long and read-only from the tag interface:

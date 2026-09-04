@@ -29,4 +29,7 @@ Starting from firmware version 2.0.0, CanoKey supports configuring PIV PIN and t
 | Key Slot | Default PIN Policy | Default Touch Policy |
 |:---------|:-------------------|:---------------------|
 | 9E       | Never              | Never                |
-| Other slots | Once            | Never                |
+| 9C       | Always             | Never                |
+| 9A, 9D, 82-95 | Once          | Never                |
+
+The default shown for slot 9C applies to firmware version 3.1.1 and later. Defaults may differ on older firmware; read the PIV metadata to determine the policies in use on a device. See [Metadata and Key Management](metadata/).

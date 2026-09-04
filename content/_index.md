@@ -4,6 +4,7 @@
 
 - [User Guide](userguide/)
 - [Development Guide](development/)
+- [Object Identifiers](oid/)
 
 ## Product and Hardware Versions
 

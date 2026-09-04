@@ -23,6 +23,14 @@ Firmware version 3.0.0 and later also support the following extended algorithms:
 | X25519         | E1           |
 | SM2            | 54           |
 
+Firmware version 3.1.1 and later also support:
+
+| Algorithm Name | Algorithm ID |
+|:---------------|:-------------|
+| NIST P-521 (`secp521r1`) | 15 |
+| ML-DSA-65 | E2 |
+| ML-KEM-768 | E3 |
+
 The IDs of the extended algorithms are configurable; management software can read the extended algorithm IDs currently used by the device and should use the values returned by the device.
 
 {{% notice note %}}
@@ -36,6 +44,7 @@ CanoKey firmware version 3.0.0 only supports signing 32-byte data using Ed25519 
 * [PIN and Touch Policies](pin-touch-policies/) — per-slot verification and touch requirements
 * [Certificates](certificates/) — certificate objects and their capacities
 * [Data Objects](data-objects/) — the other PIV data objects and their size limits
+* [Attestation](attestation/) — proving that a key was generated on the device
 * [Cryptographic Operations](crypto-operations/) — signing, decryption, and key agreement
-* [Metadata](metadata/) — reading key and credential metadata
+* [Metadata and Key Management](metadata/) — reading metadata, moving and deleting keys
 * [Common Operations](operations/) — everyday tasks with yubico-piv-tool

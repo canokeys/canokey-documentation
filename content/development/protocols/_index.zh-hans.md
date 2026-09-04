@@ -48,7 +48,7 @@ CanoKey 实现了[规范](https://gnupg.org/ftp/specs/OpenPGP-smart-card-applica
 
 #### PIV
 
-CanoKey 实现了[规范](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf)的必需特性，并提供可配置的算法 ID 等扩展。
+CanoKey 实现了[规范](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf)的必需特性，包括生物特征（biometric）和 Security Object 数据对象。它还提供了可配置的算法 ID、PIV attestation、完整的 Retired Key Management 密钥槽等扩展。
 
 命令列表、数据对象、支持的算法以及特定于固件版本的扩展，请参阅 [PIV 应用协议文档](piv/)。
 

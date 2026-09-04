@@ -17,12 +17,14 @@ CanoKey 实现了 OpenPGP Card 3.4 规范，最多可容纳 3 个密钥，即签
 * Ed25519
 * NIST P-256 (secp256r1, prime256v1)
 * NIST P-384 (secp384r1)
+* NIST P-521（secp521r1）
 * secp256k1
 * SM2
 
 {{% notice note %}}
 固件版本 1.6.1 及之前仅支持 e = 65537 的 RSA 公钥。
 固件版本 2.0.0 起支持 RSA3072 / RSA4096 密钥生成。
+固件版本 3.1.1 起支持 NIST P-521 算法。
 {{% /notice %}}
 
 ## 本章内容

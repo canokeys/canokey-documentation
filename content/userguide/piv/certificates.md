@@ -12,12 +12,16 @@ Each asymmetric key slot has a corresponding certificate object that holds an X.
 | 9C (Digital Signature) | `5FC10A` |
 | 9D (Key Management) | `5FC10B` |
 | 9E (Card Authentication) | `5FC101` |
-| 82–83 (Retired Key Management) | `5FC10D`–`5FC10E` |
+| 82–95 (Retired Key Management) | `5FC10D`–`5FC120` |
+| F9 (Attestation) | `5FFF01` |
 
 The maximum size of a certificate object depends on the firmware version:
 
 * Firmware version 1.5 or earlier: 1000 bytes
-* Firmware version 1.6 or later: 3000 bytes
+* Firmware versions 1.6 to 3.0.x: 3000 bytes
+* Firmware version 3.1.1 or later: 6144 bytes
+
+Firmware version 3.1.1 and later support all Retired Key Management certificate objects. Like the retired slots themselves, their certificate objects are allocated only when used and consume available device storage once written.
 
 ## Provisioning a Certificate
 

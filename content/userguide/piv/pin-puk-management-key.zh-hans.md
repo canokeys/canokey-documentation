@@ -8,7 +8,7 @@ PIV 应用由三个密钥保护：PIN、PUK 和管理密钥。它们分别保护
 
 ## PIN
 
-PIN 是日常使用的用户凭据。根据各槽位的 [PIN 策略](pin-touch-policies/)，使用槽内私钥进行签名、解密或密钥协商前可能需要先验证 PIN。默认 PIN 为 `123456`。
+PIN 是日常使用的用户凭据。根据各槽位的 [PIN 策略](pin-touch-policies/)，使用槽内私钥进行签名、解密或密钥协商前可能需要先验证 PIN。PIN 还保护部分数据对象的读取权限，例如 Printed Information 和生物特征对象。默认 PIN 为 `123456`。
 
 ## PUK
 
@@ -16,11 +16,15 @@ PUK（PIN Unblocking Key，PIN 解锁密钥）用于恢复被锁定的 PIN。当
 
 ## 管理密钥
 
-管理密钥是管理员凭据，为 24 字节 Triple-DES 密钥，默认值为 `010203040506070801020304050607080102030405060708`。管理密钥本身可通过 Set Management Key 指令更换。
+管理密钥是管理员凭据，为 24 字节对称密钥，默认值为 `010203040506070801020304050607080102030405060708`。固件 3.1.1 及更高版本使用 AES-192（算法 ID `0A`）；更早的固件使用 Triple-DES。管理密钥本身可通过 Set Management Key 指令更换。
 
 ## 锁定与解锁
 
-连续输错 PIN 会耗尽其重试次数，此后 PIN 被锁定，需要 PIN 的操作将失败。被锁定的 PIN 可以使用 PUK 解锁。如果 PUK 也被锁定，则可以重置 PIV 应用——Reset 指令仅在 PIN 和 PUK 均被锁定时才被接受。重置会将 PIV 用户数据恢复为默认值，并清空可写数据对象。
+连续输错 PIN 会耗尽其重试次数，此后 PIN 被锁定，需要 PIN 的操作将失败。被锁定的 PIN 可以使用 PUK 解锁。如果 PUK 也被锁定，则可以重置 PIV 应用——Reset 指令仅在 PIN 和 PUK 均被锁定时才被接受。重置会将 PIV 用户数据恢复为默认值，但保留 F9 槽位的设备证明密钥和数据对象 `5FFF01` 中的设备证明证书；其余可写数据对象将被清空。
+
+## 修改重试次数
+
+固件 3.1.1 及更高版本支持将 PIN 和 PUK 的重试次数设置为 1 至 15。该操作需要同时完成管理密钥认证和 PIN 验证，并会把 PIN、PUK 恢复为默认值。
 
 ## 各类操作所需的密钥
 
@@ -30,10 +34,13 @@ PUK（PIN Unblocking Key，PIN 解锁密钥）用于恢复被锁定的 PIN。当
 * 导入非对称密钥
 * 写入数据对象（包括证书）
 * 更换管理密钥
+* 在槽位之间移动密钥或删除密钥（固件 3.1.1 及更高版本）
+* 设置 PIN 和 PUK 重试次数（固件 3.1.1 及更高版本，另需验证 PIN）
 
 需要 PIN 的操作：
 
 * 按槽位的 [PIN 策略](pin-touch-policies/)使用私钥进行签名、解密或密钥协商
+* 读取受 PIN 保护的数据对象（Printed Information、Cardholder Fingerprints、Cardholder Facial Image、Cardholder Iris Images）
 * 修改 PIN
 
 需要 PUK 的操作：

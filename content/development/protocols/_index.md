@@ -48,7 +48,7 @@ See the [OpenPGP applet protocol documentation](openpgp/) for the command list, 
 
 #### PIV
 
-CanoKey implements the mandatory features of the [specification](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf) and provides configurable algorithm IDs and other extensions.
+CanoKey implements the mandatory features of the [specification](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-73-4.pdf), including biometric and Security Object data objects. It also provides configurable algorithm IDs, PIV attestation, complete Retired Key Management slots, and other extensions.
 
 See the [PIV applet protocol documentation](piv/) for the command list, data objects, supported algorithms, and firmware-specific extensions.
 

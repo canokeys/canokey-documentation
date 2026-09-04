@@ -11,7 +11,7 @@ pre = "<b>一、</b>"
 ## 名词表
 
 - **FIDO**: Fast Identity Online，是一个开放的行业联盟，致力于制定和推广无密码身份验证标准。
-- **WebAuthn**: Web Authentication，是一种由 W3C 定义的身份认证协议。CanoKey 支持 CTAP 2.0；从固件版本 2.0.0 起支持 CTAP 2.1。
+- **WebAuthn**: Web Authentication，是一种由 W3C 定义的身份认证协议。CanoKey 支持 CTAP 2.0；从固件版本 2.0.0 起支持 CTAP 2.1，从固件版本 3.1.1 起支持 CTAP 2.3。
 - **Passkey**: Passkey 是 WebAuthn 的一种实现。CanoKey 可以通过 CTAP 协议存储 Passkey 密钥。
 - **OpenPGP**: Open Pretty Good Privacy，是一种用于加密和签署数据的开放标准协议，广泛用于电子邮件等通信的安全保障。CanoKey 支持 OpenPGP 3.4.1 中的所有必须功能。
 - **GnuPG**: Gnu Privacy Guard，是一个实现 OpenPGP 标准的自由软件工具，用于加密和签署数据。
@@ -24,7 +24,7 @@ pre = "<b>一、</b>"
 
 ## 兼容性标记
 
-本文档仅按最低固件版本标记功能兼容性。例如，**2.0.0+** 表示该功能需要 2.0.0 或更高版本固件。
+本文档仅按最低固件版本标记功能兼容性。例如，**3.1.1+** 表示该功能需要 3.1.1 或更高版本固件。
 
 ## 默认 PIN
 
